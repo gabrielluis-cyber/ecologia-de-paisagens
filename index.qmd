@@ -1,0 +1,28 @@
+---
+title: "Ecologia de paisagens workbook"
+editor_options: 
+  chunk_output_type: inline
+---
+
+*Este workbook foi desenvolvido para a disciplina "Ecologia de paisagens" da UFPE, ministrada pelo professor doutor Felipe Melo.*
+
+# *Como fiz o workbook?*
+
+*- Desenvolvido na plataforma R, do Rteam, através do RStudio e do pacote Quatro.*
+
+```         
+- Importante para o desenvolvimento da disciplina.
+- Utilizado para entregar atividades desenvolvidas
+```
+
+![RTEAM](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/RStudio_logo_flat.svg/960px-RStudio_logo_flat.svg.png)
+
+::: callout-note
+## Todos os exercícios serão publicados nesse workbook
+
+Inclusive esse
+:::
+
+## Um pouco sobre mim:
+
+Sou aluno de Ciência Biológicas Bacharelado e estou cursando a disciplina "Ecologia de Paisagens" a qual é endereçada esse workbook. Gosto do tema ecologia, estou no 9º período e desenvolvendo um PIBIC.
