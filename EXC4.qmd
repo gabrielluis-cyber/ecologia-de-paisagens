@@ -1,0 +1,216 @@
+---
+title: "EXC4"
+---
+```{r}
+library("terra")
+library("sf")
+library("landscapemetrics")
+library("tmap")
+library("ggplot2")
+library("vegan")
+library("tidyverse")
+library("rgbif")
+library("geodata")
+library("geobr")
+library("tidyterra")
+```
+
+EXC 4:
+```{r}
+#Definindo o diretorio do Raster
+
+setwd("C:/faculdade/Script ecologiaP")
+r_murici <- rast("2024_murici.tif")
+
+#Trocando Latitude e longitude por metros
+r_utm <- project(r_murici, "EPSG:31985", method = "near")
+
+#Atribuindo classes
+legenda <- data.frame(
+  id = c(3, 4, 11, 15, 20, 21, 24, 25, 33),
+  Categoria = c("Formação Florestal", "Formação Savânica", "Campo Alagado", 
+                "Pastagem", "Cana", "Mosaico de Usos", "Área Urbanizada", 
+                "Outras Áreas não Vegetadas", "Corpo d'Água"),
+  Cores = c("#006400", "#7cfc00", "#00ffff", "#ffff00", "#ff4500", 
+            "#f4a460", "#ff0000", "#d3d3d3", "#0000ff")
+)
+
+levels(r_utm) <- legenda[,1:2]
+
+#Sorteio seguro (longe da borda)
+
+vetor_total <- as.polygons(r_utm, dissolve = TRUE)
+municipio_limite <- aggregate(vetor_total)
+limite_seguro <- buffer(municipio_limite, width = -2000)
+
+floresta <- vetor_total[vetor_total$Categoria == "Formação Florestal", ]
+area_sorteio <- crop(floresta, limite_seguro)
+
+if (is.list(area_sorteio)) {
+  area_sorteio <- do.call(rbind, area_sorteio)
+}
+
+if (nrow(area_sorteio) == 0) {
+  stop("Erro: Nenhuma floresta encontrada a mais de 2km da borda.")
+}
+
+#Visualizando área de sorteio
+
+ggplot() +
+  geom_spatraster(data = r_utm) +
+  scale_fill_manual(values = legenda$Cores, na.value = "white", name = "Uso do Solo") +
+  geom_spatvector(data = municipio_limite, fill = NA, color = "black", linewidth = 1) +
+  geom_spatvector(data = limite_seguro, fill = NA, color = "black", linetype = "dashed", linewidth = 1) +
+  geom_spatvector(data = floresta, fill = "darkgreen", alpha = 0.3, color = NA) +
+  geom_spatvector(data = area_sorteio, fill = "forestgreen", alpha = 0.5, color = NA) +
+  labs(title = "Área de sorteio (floresta > 2 km da borda)") +
+  theme_minimal()
+
+#Sortenado pontos dentro da área minima - minimo de 1000m entre os pontos
+
+set.seed(1234)
+pontos_finais <- NULL
+tentativas <- 0
+
+while(is.null(pontos_finais) || nrow(pontos_finais) < 15) {
+  tentativas <- tentativas + 1
+  cand <- spatSample(area_sorteio, size = 1, method = "random")
+  
+  if (nrow(cand) > 0) {
+    if (is.null(pontos_finais)) {
+      pontos_finais <- cand
+    } else {
+      dists <- distance(cand, pontos_finais)
+      if (min(dists) >= 1000) { 
+        pontos_finais <- rbind(pontos_finais, cand)
+      }
+    }
+  }
+  
+  if (tentativas > 5000) break
+}
+
+#Criando buffers
+
+## Verificando CRS (Coordinate Reference System)
+
+
+# Verificar CRS
+if (!identical(crs(pontos_finais), crs(r_utm))) {
+  pontos_finais <- project(pontos_finais, crs(r_utm))
+}
+
+buffers <- buffer(pontos_finais, width = 500)
+buffers$id_paisagem <- 1:nrow(buffers)
+
+# Extração e processamento
+extracao <- terra::extract(r_utm, buffers)
+nome_col_raster <- names(extracao)[2]
+
+tabela_final <- extracao %>%
+  rename(id_buffer = ID, categoria_bruta = !!sym(nome_col_raster)) %>%
+  group_by(id_buffer) %>%
+  mutate(total_px = n()) %>%
+  group_by(id_buffer, categoria_bruta) %>%
+  summarise(
+    pixels = n(),
+    percentagem = (pixels / first(total_px)) * 100,
+    .groups = "drop"
+  ) %>%
+  mutate(Categoria_Limpa = as.character(categoria_bruta)) %>%
+  left_join(legenda %>% select(Categoria, Cores), by = c("Categoria_Limpa" = "Categoria"))
+
+write.csv(tabela_final, "uso_solo_murici_final.csv", row.names = FALSE)
+writeVector(pontos_finais, "pontos_final.shp", overwrite=TRUE)
+
+writeVector(buffers, "buffers_500m.shp", overwrite=TRUE)
+
+# Vizualização 
+
+ggplot() +
+  geom_spatraster(data = r_utm) +
+  scale_fill_manual(values = legenda$Cores, na.value = "white", name = "Uso do Solo") +
+  geom_spatvector(data = buffers, fill = NA, color = "black", linewidth = 1) +
+  geom_spatvector(data = pontos_finais, color = "red", size = 2, shape = 19) +
+  geom_spatvector_text(data = pontos_finais, aes(label = 1:15), 
+                       color = "white", size = 3, vjust = -0.8) +
+  labs(title = "Pontos amostrais e buffers de 500 m") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+# Usando o Landscapes Metrics
+## Diversidade da paisagem – Índice de Shannon (lsm_l_shdi)
+##% de cobertura florestal – Proporção da classe “Formação Florestal” (lsm_c_pland)
+##Densidade de borda da classe floresta – lsm_c_ed (edge density, em m/ha)
+
+# Identificar o valor numérico da classe Floresta
+id_floresta <- legenda$id[legenda$Categoria == "Formação Florestal"]
+
+# Lista para armazenar métricas de cada buffer
+metricas_lista <- list()
+
+for(i in 1:nrow(buffers)) {
+  # Recortar o raster para o buffer i
+  crop_i <- crop(r_utm, buffers[i,])
+  mask_i <- mask(crop_i, buffers[i,])
+  
+  # Calcular Shannon diversity (nível da paisagem)
+  shannon <- lsm_l_shdi(mask_i)
+  
+  # Calcular métricas de classe para todas as classes
+  pland_all <- lsm_c_pland(mask_i)   # percentual de cada classe
+  ed_all <- lsm_c_ed(mask_i)         # densidade de borda por classe
+  
+  # Filtrar apenas a classe floresta
+  pland_floresta <- pland_all %>% filter(class == id_floresta)
+  ed_floresta <- ed_all %>% filter(class == id_floresta)
+  
+  # Extrair valores (se não houver floresta, colocar NA ou 0)
+  div_shannon <- shannon$value
+  perc_floresta <- ifelse(nrow(pland_floresta) > 0, pland_floresta$value, 0)
+  dens_borda <- ifelse(nrow(ed_floresta) > 0, ed_floresta$value, NA)
+  
+  # Guardar
+  metricas_lista[[i]] <- data.frame(
+    id_buffer = i,
+    diversidade_shannon = div_shannon,
+    perc_floresta = perc_floresta,
+    densidade_borda_m_ha = dens_borda
+  )
+}
+
+# Combinar tudo
+metricas_paisagem <- bind_rows(metricas_lista)
+
+print(metricas_paisagem)
+
+
+
+# Painel de paisagens 5X3
+
+lista_recortes <- list()
+for(i in 1:nrow(buffers)) {
+  crop_i <- crop(r_utm, buffers[i, ])
+  mask_i <- mask(crop_i, buffers[i, ])
+  df_i <- as.data.frame(mask_i, xy = TRUE, cells = TRUE)
+  df_i$id_buffer <- paste("Paisagem", i)
+  lista_recortes[[i]] <- df_i
+}
+df_painel <- bind_rows(lista_recortes)
+
+ggplot(df_painel) +
+  geom_tile(aes(x = x, y = y, fill = Categoria)) +
+  scale_fill_manual(values = setNames(legenda$Cores, legenda$Categoria)) +
+  facet_wrap(~id_buffer, nrow = 3, ncol = 5, scales = "free") +
+  theme_minimal() +
+  labs(title = "Painel de Amostragem: 15 Paisagens de Murici-AL",
+       subtitle = "Recortes circulares de 500m de raio (Interior de Floresta)",
+       fill = "Uso do Solo") +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank(),
+        legend.position = "bottom")
+
+
+```

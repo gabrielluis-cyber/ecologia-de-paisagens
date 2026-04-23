@@ -1,0 +1,11 @@
+---
+title: "Exercicios lista"
+---
+
+# Exercicio 1, 2 e 3
+
+[Exercício 1 2 e 3 - Primeiros Passos](Aulas e exercicio.qmd)
+
+# Exercicio 4
+
+[Exercício 4](EXC4.qmd)
