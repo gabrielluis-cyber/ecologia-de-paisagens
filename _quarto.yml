@@ -10,8 +10,6 @@ website:
         text: Home
       - href: Exercicios qmd.qmd
         text: Exercicios
-      - href: Aulas e exercicio.qmd
-        text: Exc 1
       - about.qmd
 
 format:
