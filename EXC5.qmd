@@ -1,24 +1,18 @@
 ---
-title: "EXC4"
+title: "EXC5"
 ---
 
-```{r}
-library("terra")
-library("sf")
-library("landscapemetrics")
-library("tmap")
-library("ggplot2")
-library("vegan")
-library("tidyverse")
-library("rgbif")
-library("geodata")
-library("geobr")
-library("tidyterra")
-```
+Aqui está o Script para atividade 5...
 
-EXC 4:
+O municipio de minha escolha foi Camaragibe - PE. Os dados foram baixados na forma de RASTER em arquivo .tif através da plataforma MapBiomas.
 
-```{r}
+As discussões serão feitas à seguir:
+
+
+Os pontos 
+
+
+````{r}
 #Definindo o diretorio do Raster
 
 setwd("C:/faculdade/Script ecologiaP")
@@ -215,4 +209,141 @@ ggplot(df_painel) +
         legend.position = "bottom")
 
 
-```
+# Usando o Landscapes Metrics
+## Diversidade da paisagem – Índice de Shannon (lsm_l_shdi)
+##% de cobertura florestal – Proporção da classe “Formação Florestal” (lsm_c_pland)
+##Densidade de borda da classe floresta – lsm_c_ed (edge density, em m/ha)
+
+# Identificar o valor numérico da classe Floresta
+id_floresta <- legenda$id[legenda$Categoria == "Formação Florestal"]
+
+# Lista para armazenar métricas de cada buffer
+metricas_lista <- list()
+
+for(i in 1:nrow(buffers)) {
+  # Recortar o raster para o buffer i
+  crop_i <- crop(camaragibe_utm, buffers_500m[i,])
+  mask_i <- mask(crop_i, buffers_500m[i,])
+  
+  # Calcular Shannon diversity (nível da paisagem)
+  shannon <- lsm_l_shdi(mask_i)
+  
+  # Calcular métricas de classe para todas as classes
+  pland_all <- lsm_c_pland(mask_i)   # percentual de cada classe
+  ed_all <- lsm_c_ed(mask_i)         # densidade de borda por classe
+  
+  # Filtrar apenas a classe floresta
+  pland_floresta <- pland_all %>% filter(class == id_floresta)
+  ed_floresta <- ed_all %>% filter(class == id_floresta)
+  
+  # Extrair valores (se não houver floresta, colocar NA ou 0)
+  div_shannon <- shannon$value
+  perc_floresta <- ifelse(nrow(pland_floresta) > 0, pland_floresta$value, 0)
+  dens_borda <- ifelse(nrow(ed_floresta) > 0, ed_floresta$value, NA)
+  
+  # Guardar
+  metricas_lista[[i]] <- data.frame(
+    id_buffer = i,
+    diversidade_shannon = div_shannon,
+    perc_floresta = perc_floresta,
+    densidade_borda_m_ha = dens_borda
+  )
+}
+
+### PARTE CRIADA POR IA PARA CORRIGIR ERROS###
+
+# 1. Forçar o carregamento do raster para evitar erro de ponteiro NULL
+# camara_ref <- readAll(camaragibe_utm) # Se usar versão antiga do terra
+camara_ref <- camaragibe_utm 
+
+# 2. Garantir o ID correto (MapBiomas simplificado costuma ser 3)
+id_floresta <- 3 
+
+metricas_lista <- list()
+
+for(i in 1:nrow(buffers_500m)) {
+  
+  # Recortar e mascarar com segurança
+  # Se o buffer tocar a borda, o tryCatch evita que o código pare
+  mask_i <- tryCatch({
+    c_i <- crop(camara_ref, buffers_500m[i,])
+    mask(c_i, buffers_500m[i,])
+  }, error = function(e) return(NULL))
+  
+  if(is.null(mask_i)) next
+  
+  # 3. Calcular métricas
+  # Shannon (Paisagem) - Se houver apenas 1 classe, o valor é 0
+  shannon <- lsm_l_shdi(mask_i)
+  
+  # PLAND e ED (Classe)
+  pland_all <- lsm_c_pland(mask_i)
+  ed_all <- lsm_c_ed(mask_i)
+  
+  # Filtrar floresta
+  p_f <- pland_all %>% filter(class == id_floresta)
+  e_f <- ed_all %>% filter(class == id_floresta)
+  
+  # 4. Organizar os resultados
+  metricas_lista[[i]] <- data.frame(
+    id_buffer = i,
+    diversidade_shannon = shannon$value,
+    perc_floresta = if(nrow(p_f) > 0) p_f$value else 0,
+    densidade_borda_m_ha = if(nrow(e_f) > 0) e_f$value else 0
+  )
+}
+
+# Combinar em uma tabela única
+metricas_paisagem <- bind_rows(metricas_lista)
+print(metricas_paisagem)
+
+# Combinar tudo
+metricas_paisagem <- bind_rows(metricas_lista)
+
+print(metricas_paisagem)
+
+### FIM DA PARTE CRIADA INTEREIRAMENTE POR IA ###
+
+# Painel de paisagens 5X3 para Camaragibe
+
+lista_recortes <- list()
+for(i in 1:nrow(buffers_500m)) {
+  # Recortar o raster para o buffer i
+  crop_i <- crop(camaragibe_utm, buffers_500m[i, ])
+  mask_i <- mask(crop_i, buffers_500m[i, ])
+  
+  # Converter para data.frame
+  df_i <- as.data.frame(mask_i, xy = TRUE)
+  
+  # Nomear a coluna de valor para "Categoria" para bater com o scale_fill_manual
+  # (Assume-se que a coluna de valor é a terceira: x, y, valor)
+  colnames(df_i)[3] <- "Categoria"
+  
+  # Converter Categoria para fator com os nomes corretos
+  df_i$Categoria <- factor(df_i$Categoria, 
+                           levels = c(3, 11, 21, 24, 33), 
+                           labels = c("Floresta", "Área Úmida", "Agropecuária", "Urbano", "Água"))
+  
+  df_i$id_buffer <- paste("Paisagem", i)
+  lista_recortes[[i]] <- df_i
+}
+
+df_painel <- bind_rows(lista_recortes)
+
+# Plotando o Painel 5x3
+ggplot(df_painel) +
+  geom_tile(aes(x = x, y = y, fill = Categoria)) +
+  scale_fill_manual(values = cores_legenda) +
+  facet_wrap(~id_buffer, nrow = 3, ncol = 5, scales = "free") +
+  theme_minimal() +
+  labs(title = "Painel de Amostragem: 15 Paisagens de Camaragibe-PE",
+       subtitle = "Recortes circulares de 500m de raio (Interior de Floresta)",
+       fill = "Uso do Solo") +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank(),
+        legend.position = "bottom")
+
+````
+
+

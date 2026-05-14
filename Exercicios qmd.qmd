@@ -9,3 +9,6 @@ title: "Exercicios lista"
 # Exercicio 4
 
 [Exercício 4](EXC4.qmd)
+
+[Exercício 5](EXC5.qmd)
+
