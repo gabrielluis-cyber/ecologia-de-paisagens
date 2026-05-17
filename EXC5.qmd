@@ -1,5 +1,7 @@
 ---
 title: "EXC5"
+editor_options: 
+  chunk_output_type: console
 ---
 
 Aqui está o Script para atividade 5...
@@ -8,342 +10,256 @@ O municipio de minha escolha foi Camaragibe - PE. Os dados foram baixados na for
 
 As discussões serão feitas à seguir:
 
+Os pontos
 
-Os pontos 
+```{r}
+library("terra")
+library("sf")
+library("landscapemetrics")
+library("tmap")
+library("ggplot2")
+library("vegan")
+library("tidyverse")
+library("rgbif")
+library("geodata")
+library("geobr")
+library("tidyterra")
 
+cat("✓ Todos os pacotes carregados com sucesso!\n")
 
-````{r}
-#Definindo o diretorio do Raster
+# Carregando Raster (o Quarto vai buscar direto na mesma pasta onde ele está)
+Camaragibe <- rast("rast_camaragibe.tif")
 
-setwd("C:/faculdade/Script ecologiaP")
-r_murici <- rast("2024_murici.tif")
+# Reprojetando o raster para metros (UTM 25S)
+camaragibe_utm <- project(Camaragibe, "EPSG:31985", method = "near")
 
-#Trocando Latitude e longitude por metros
-r_utm <- project(r_murici, "EPSG:31985", method = "near")
+# Verificando se a resolução está correta e se o CRS mudou
+print(camaragibe_utm)
 
-#Atribuindo classes
-legenda <- data.frame(
-  id = c(3, 4, 11, 15, 20, 21, 24, 25, 33),
-  Categoria = c("Formação Florestal", "Formação Savânica", "Campo Alagado", 
-                "Pastagem", "Cana", "Mosaico de Usos", "Área Urbanizada", 
-                "Outras Áreas não Vegetadas", "Corpo d'Água"),
-  Cores = c("#006400", "#7cfc00", "#00ffff", "#ffff00", "#ff4500", 
-            "#f4a460", "#ff0000", "#d3d3d3", "#0000ff")
+# Verificando os ID's do raster
+unique(Camaragibe)
+
+# Classificando o Raster como categórico 
+Camaragibe_fator <- as.factor(camaragibe_utm)
+
+# Definindo seu dicionário de cores (perfeito)
+df_legenda <- data.frame(
+  ID = c(3, 11, 15, 20, 21, 24, 25, 33),
+  Classe = c("Floresta contínua", "Áreas úmidas", "Pastagem", "Cana", 
+             "Agropecuária", "Urbano contínuo", "Solo exposto", "Água"),
+  Cor = c("#1f8d49", "#519799", "#edde8e", "#db7093", 
+          "#ffefc3", "#d4271e", "#ffaa00", "#0000FF")
 )
 
-levels(r_utm) <- legenda[,1:2]
+# Criando vetores nomeados baseados DIRETAMENTE no ID numérico do MapBiomas
+cores_projeto   <- setNames(df_legenda$Cor, df_legenda$ID)
+classes_projeto <- setNames(df_legenda$Classe, df_legenda$ID)
 
-#Sorteio seguro (longe da borda)
+cat("✓ Cores e legendas prontas para o ggplot!\n")
 
-vetor_total <- as.polygons(r_utm, dissolve = TRUE)
-municipio_limite <- aggregate(vetor_total)
-limite_seguro <- buffer(municipio_limite, width = -2000)
-
-floresta <- vetor_total[vetor_total$Categoria == "Formação Florestal", ]
-area_sorteio <- crop(floresta, limite_seguro)
-
-if (is.list(area_sorteio)) {
-  area_sorteio <- do.call(rbind, area_sorteio)
-}
-
-if (nrow(area_sorteio) == 0) {
-  stop("Erro: Nenhuma floresta encontrada a mais de 2km da borda.")
-}
-
-#Visualizando área de sorteio
-
+# Plotando com a amarração correta de IDs
 ggplot() +
-  geom_spatraster(data = r_utm) +
-  scale_fill_manual(values = legenda$Cores, na.value = "white", name = "Uso do Solo") +
-  geom_spatvector(data = municipio_limite, fill = NA, color = "black", linewidth = 1) +
-  geom_spatvector(data = limite_seguro, fill = NA, color = "black", linetype = "dashed", linewidth = 1) +
-  geom_spatvector(data = floresta, fill = "darkgreen", alpha = 0.3, color = NA) +
-  geom_spatvector(data = area_sorteio, fill = "forestgreen", alpha = 0.5, color = NA) +
-  labs(title = "Área de sorteio (floresta > 2 km da borda)") +
-  theme_minimal()
+  geom_spatraster(data = Camaragibe_fator) +
+  scale_fill_manual(
+    values = cores_projeto,     # O ggplot olha o ID do pixel e busca no vetor
+    labels = classes_projeto,   # O ggplot substitui o número pelo nome correto
+    na.value = "transparent",
+    name = "Uso e Cobertura",
+    breaks = df_legenda$ID      # Força o ggplot a olhar estritamente para esses IDs
+  ) +
+  theme_minimal() +
+  labs(
+    title = "Uso do Solo - Camaragibe",
+    x = "Longitude (UTM)", 
+    y = "Latitude (UTM)"
+  )
 
-#Sortenado pontos dentro da área minima - minimo de 1000m entre os pontos
+# Criando o limite de borda do municipio
+municipio_sf <- as.polygons(camaragibe_utm) %>% 
+  st_as_sf() %>% 
+  st_union()
 
-set.seed(1234)
-pontos_finais <- NULL
-tentativas <- 0
+# Criar a "Área Segura" (Buffer negativo de 1000 metros)
+margem_segura <- st_buffer(municipio_sf, dist = -1000)
 
-while(is.null(pontos_finais) || nrow(pontos_finais) < 15) {
-  tentativas <- tentativas + 1
-  cand <- spatSample(area_sorteio, size = 1, method = "random")
-  
-  if (nrow(cand) > 0) {
-    if (is.null(pontos_finais)) {
-      pontos_finais <- cand
-    } else {
-      dists <- distance(cand, pontos_finais)
-      if (min(dists) >= 1000) { 
-        pontos_finais <- rbind(pontos_finais, cand)
-      }
-    }
+cat("✓ Limites municipais e zona de segurança gerados com sucesso!\n")
+
+# ==============================================================================
+# EXTRAÇÃO DA FLORESTA SEM DEPENDER DE NOMES DE COLUNAS VAGOS
+# ==============================================================================
+# Mascaramos o raster: mantemos apenas os pixels da classe 3, o resto vira NA
+floresta_raster <- camaragibe_utm == 3
+floresta_raster[floresta_raster == 0] <- NA
+
+# Agora transformamos em vetor. O R gera polígonos APENAS para os dados válidos (floresta)
+floresta_total_sf <- as.polygons(floresta_raster, dissolve = TRUE) %>% 
+  st_as_sf()
+
+# Cruzando com a margem segura
+floresta_sorteio <- st_intersection(floresta_total_sf, margem_segura)
+
+if (nrow(floresta_sorteio) == 0) {
+  stop("Erro: Não há manchas de floresta a mais de 1km da borda do município.")
+}
+
+cat("✓ Fragmentos de floresta para sorteio filtrados com sucesso! Total de manchas:", nrow(floresta_sorteio), "\n")
+
+# Set.seed para permitir reprodutibilidade
+set.seed(1) 
+
+# Gerando candidatos a pontos amostrais
+candidatos <- st_sample(floresta_sorteio, size = 500) %>% 
+  st_as_sf()
+
+# Inicializando o objeto de pontos finais com o primeiro candidato
+pontos_finais <- candidatos[1, ]
+
+# ==============================================================================
+# SELEÇÃO ESPACIAL: FILTRO DE DISTÂNCIA MÍNIMA DE 1KM (REINTEGRADO)
+# ==============================================================================
+for(i in 2:nrow(candidatos)) {
+  dist <- st_distance(candidatos[i, ], pontos_finais)
+  if(all(as.numeric(dist) > 1000)) {
+    pontos_finais <- rbind(pontos_finais, candidatos[i, ])
   }
   
-  if (tentativas > 5000) break
+  if(nrow(pontos_finais) == 15) {
+    break
+  }
 }
 
-#Criando buffers
-
-## Verificando CRS (Coordinate Reference System)
-
-
-# Verificar CRS
-if (!identical(crs(pontos_finais), crs(r_utm))) {
-  pontos_finais <- project(pontos_finais, crs(r_utm))
+# Verificando a quantidade final de pontos obtidos
+if(nrow(pontos_finais) < 15) {
+  warning("Aviso: O script conseguiu encontrar apenas ", nrow(pontos_finais), " pontos respeitando a distância de 1km.")
+} else {
+  cat("✓ Sucesso! Os 15 pontos amostrais foram sorteados e espaçados corretamente!\n")
 }
 
-buffers <- buffer(pontos_finais, width = 500)
-buffers$id_paisagem <- 1:nrow(buffers)
+# Criando as janelas amostrais circulares de 500 metros ao redor dos pontos obtidos
+buffers_500m <- st_buffer(pontos_finais, dist = 500)
 
-# Extração e processamento
-extracao <- terra::extract(r_utm, buffers)
-nome_col_raster <- names(extracao)[2]
-
-tabela_final <- extracao %>%
-  rename(id_buffer = ID, categoria_bruta = !!sym(nome_col_raster)) %>%
-  group_by(id_buffer) %>%
-  mutate(total_px = n()) %>%
-  group_by(id_buffer, categoria_bruta) %>%
-  summarise(
-    pixels = n(),
-    percentagem = (pixels / first(total_px)) * 100,
-    .groups = "drop"
-  ) %>%
-  mutate(Categoria_Limpa = as.character(categoria_bruta)) %>%
-  left_join(legenda %>% select(Categoria, Cores), by = c("Categoria_Limpa" = "Categoria"))
-
-write.csv(tabela_final, "uso_solo_murici_final.csv", row.names = FALSE)
-writeVector(pontos_finais, "pontos_final.shp", overwrite=TRUE)
-
-writeVector(buffers, "buffers_500m.shp", overwrite=TRUE)
-
-# Vizualização 
-
+# ==============================================================================
+# PLOT DO MAPA GERAL DA AMOSTRAGEM
+# ==============================================================================
 ggplot() +
-  geom_spatraster(data = r_utm) +
-  scale_fill_manual(values = legenda$Cores, na.value = "white", name = "Uso do Solo") +
-  geom_spatvector(data = buffers, fill = NA, color = "black", linewidth = 1) +
-  geom_spatvector(data = pontos_finais, color = "red", size = 2, shape = 19) +
-  geom_spatvector_text(data = pontos_finais, aes(label = 1:15), 
-                       color = "white", size = 3, vjust = -0.8) +
-  labs(title = "Pontos amostrais e buffers de 500 m") +
+  geom_spatraster(data = Camaragibe_fator) + 
+  scale_fill_manual(
+    values = cores_projeto,          
+    labels = classes_projeto,      
+    na.value = "transparent",
+    name = "Classes de Uso",
+    breaks = df_legenda$ID          
+  ) +
+  geom_sf(data = buffers_500m, fill = NA, color = "black", linewidth = 0.8) +
+  geom_sf(data = pontos_finais, color = "white", fill = "black", shape = 21, size = 2.5) +
   theme_minimal() +
-  theme(legend.position = "bottom")
-
-
-# Usando o Landscapes Metrics
-## Diversidade da paisagem – Índice de Shannon (lsm_l_shdi)
-##% de cobertura florestal – Proporção da classe “Formação Florestal” (lsm_c_pland)
-##Densidade de borda da classe floresta – lsm_c_ed (edge density, em m/ha)
-
-# Identificar o valor numérico da classe Floresta
-id_floresta <- legenda$id[legenda$Categoria == "Formação Florestal"]
-
-# Lista para armazenar métricas de cada buffer
-metricas_lista <- list()
-
-for(i in 1:nrow(buffers)) {
-  # Recortar o raster para o buffer i
-  crop_i <- crop(r_utm, buffers[i,])
-  mask_i <- mask(crop_i, buffers[i,])
-  
-  # Calcular Shannon diversity (nível da paisagem)
-  shannon <- lsm_l_shdi(mask_i)
-  
-  # Calcular métricas de classe para todas as classes
-  pland_all <- lsm_c_pland(mask_i)   # percentual de cada classe
-  ed_all <- lsm_c_ed(mask_i)         # densidade de borda por classe
-  
-  # Filtrar apenas a classe floresta
-  pland_floresta <- pland_all %>% filter(class == id_floresta)
-  ed_floresta <- ed_all %>% filter(class == id_floresta)
-  
-  # Extrair valores (se não houver floresta, colocar NA ou 0)
-  div_shannon <- shannon$value
-  perc_floresta <- ifelse(nrow(pland_floresta) > 0, pland_floresta$value, 0)
-  dens_borda <- ifelse(nrow(ed_floresta) > 0, ed_floresta$value, NA)
-  
-  # Guardar
-  metricas_lista[[i]] <- data.frame(
-    id_buffer = i,
-    diversidade_shannon = div_shannon,
-    perc_floresta = perc_floresta,
-    densidade_borda_m_ha = dens_borda
+  labs(
+    title = "Pontos de Amostragem em Fragmentos de Floresta",
+    subtitle = "Município de Camaragibe - PE | Buffers de 500m de raio",
+    x = "Longitude (m)",
+    y = "Latitude (m)"
+  ) +
+  theme(
+    plot.title = element_text(face = "bold", size = 12),
+    panel.grid.major = element_line(color = "gray95")
   )
-}
 
-# Combinar tudo
-metricas_paisagem <- bind_rows(metricas_lista)
+# ==============================================================================
+# CÁLCULO DE MÉTRICAS DA PAISAGEM (LANDSCAPEMETRICS)
+# ==============================================================================
+id_floresta <- df_legenda$ID[df_legenda$Classe == "Floresta contínua"]
 
-print(metricas_paisagem)
-
-
-
-# Painel de paisagens 5X3
-
-lista_recortes <- list()
-for(i in 1:nrow(buffers)) {
-  crop_i <- crop(r_utm, buffers[i, ])
-  mask_i <- mask(crop_i, buffers[i, ])
-  df_i <- as.data.frame(mask_i, xy = TRUE, cells = TRUE)
-  df_i$id_buffer <- paste("Paisagem", i)
-  lista_recortes[[i]] <- df_i
-}
-df_painel <- bind_rows(lista_recortes)
-
-ggplot(df_painel) +
-  geom_tile(aes(x = x, y = y, fill = Categoria)) +
-  scale_fill_manual(values = setNames(legenda$Cores, legenda$Categoria)) +
-  facet_wrap(~id_buffer, nrow = 3, ncol = 5, scales = "free") +
-  theme_minimal() +
-  labs(title = "Painel de Amostragem: 15 Paisagens de Murici-AL",
-       subtitle = "Recortes circulares de 500m de raio (Interior de Floresta)",
-       fill = "Uso do Solo") +
-  theme(axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        panel.grid = element_blank(),
-        legend.position = "bottom")
-
-
-# Usando o Landscapes Metrics
-## Diversidade da paisagem – Índice de Shannon (lsm_l_shdi)
-##% de cobertura florestal – Proporção da classe “Formação Florestal” (lsm_c_pland)
-##Densidade de borda da classe floresta – lsm_c_ed (edge density, em m/ha)
-
-# Identificar o valor numérico da classe Floresta
-id_floresta <- legenda$id[legenda$Categoria == "Formação Florestal"]
-
-# Lista para armazenar métricas de cada buffer
+# produzindo lista
 metricas_lista <- list()
 
-for(i in 1:nrow(buffers)) {
-  # Recortar o raster para o buffer i
-  crop_i <- crop(camaragibe_utm, buffers_500m[i,])
-  mask_i <- mask(crop_i, buffers_500m[i,])
-  
-  # Calcular Shannon diversity (nível da paisagem)
-  shannon <- lsm_l_shdi(mask_i)
-  
-  # Calcular métricas de classe para todas as classes
-  pland_all <- lsm_c_pland(mask_i)   # percentual de cada classe
-  ed_all <- lsm_c_ed(mask_i)         # densidade de borda por classe
-  
-  # Filtrar apenas a classe floresta
-  pland_floresta <- pland_all %>% filter(class == id_floresta)
-  ed_floresta <- ed_all %>% filter(class == id_floresta)
-  
-  # Extrair valores (se não houver floresta, colocar NA ou 0)
-  div_shannon <- shannon$value
-  perc_floresta <- ifelse(nrow(pland_floresta) > 0, pland_floresta$value, 0)
-  dens_borda <- ifelse(nrow(ed_floresta) > 0, ed_floresta$value, NA)
-  
-  # Guardar
-  metricas_lista[[i]] <- data.frame(
-    id_buffer = i,
-    diversidade_shannon = div_shannon,
-    perc_floresta = perc_floresta,
-    densidade_borda_m_ha = dens_borda
-  )
-}
-
-### PARTE CRIADA POR IA PARA CORRIGIR ERROS###
-
-# 1. Forçar o carregamento do raster para evitar erro de ponteiro NULL
-# camara_ref <- readAll(camaragibe_utm) # Se usar versão antiga do terra
-camara_ref <- camaragibe_utm 
-
-# 2. Garantir o ID correto (MapBiomas simplificado costuma ser 3)
-id_floresta <- 3 
-
-metricas_lista <- list()
-
+# processamento
 for(i in 1:nrow(buffers_500m)) {
-  
-  # Recortar e mascarar com segurança
-  # Se o buffer tocar a borda, o tryCatch evita que o código pare
-  mask_i <- tryCatch({
-    c_i <- crop(camara_ref, buffers_500m[i,])
-    mask(c_i, buffers_500m[i,])
-  }, error = function(e) return(NULL))
-  
-  if(is.null(mask_i)) next
-  
-  # 3. Calcular métricas
-  # Shannon (Paisagem) - Se houver apenas 1 classe, o valor é 0
-  shannon <- lsm_l_shdi(mask_i)
-  
-  # PLAND e ED (Classe)
-  pland_all <- lsm_c_pland(mask_i)
-  ed_all <- lsm_c_ed(mask_i)
-  
-  # Filtrar floresta
-  p_f <- pland_all %>% filter(class == id_floresta)
-  e_f <- ed_all %>% filter(class == id_floresta)
-  
-  # 4. Organizar os resultados
-  metricas_lista[[i]] <- data.frame(
-    id_buffer = i,
-    diversidade_shannon = shannon$value,
-    perc_floresta = if(nrow(p_f) > 0) p_f$value else 0,
-    densidade_borda_m_ha = if(nrow(e_f) > 0) e_f$value else 0
-  )
-}
-
-# Combinar em uma tabela única
-metricas_paisagem <- bind_rows(metricas_lista)
-print(metricas_paisagem)
-
-# Combinar tudo
-metricas_paisagem <- bind_rows(metricas_lista)
-
-print(metricas_paisagem)
-
-### FIM DA PARTE CRIADA INTEREIRAMENTE POR IA ###
-
-# Painel de paisagens 5X3 para Camaragibe
-
-lista_recortes <- list()
-for(i in 1:nrow(buffers_500m)) {
-  # Recortar o raster para o buffer i
   crop_i <- crop(camaragibe_utm, buffers_500m[i, ])
   mask_i <- mask(crop_i, buffers_500m[i, ])
   
-  # Converter para data.frame
-  df_i <- as.data.frame(mask_i, xy = TRUE)
+  # A. Calcular o Índice de Diversidade de Shannon (nível da paisagem)
+  shannon <- lsm_l_shdi(mask_i)
   
-  # Nomear a coluna de valor para "Categoria" para bater com o scale_fill_manual
-  # (Assume-se que a coluna de valor é a terceira: x, y, valor)
+  # B. Calcular métricas de classe para todas as classes presentes no buffer
+  pland_all <- lsm_c_pland(mask_i)   # % de cobertura de cada classe
+  ed_all <- lsm_c_ed(mask_i)         # Densidade de borda (m/ha) de cada classe
+  
+  # C. Filtrar os resultados especificamente para a classe de Floresta (ID 3)
+  pland_floresta <- pland_all %>% filter(class == id_floresta)
+  ed_floresta    <- ed_all %>% filter(class == id_floresta)
+  
+  # D. Extrair os valores numéricos brutos
+  div_shannon   <- shannon$value
+  perc_floresta <- ifelse(nrow(pland_floresta) > 0, pland_floresta$value, 0)
+  dens_borda    <- ifelse(nrow(ed_floresta) > 0, ed_floresta$value, 0)
+  
+  # E. Armazenar os resultados estruturados em uma linha do data frame
+  metricas_lista[[i]] <- data.frame(
+    id_buffer = i,
+    diversidade_shannon = div_shannon,
+    perc_floresta = perc_floresta,
+    densidade_borda_m_ha = dens_borda
+  )
+}
+
+cat("✓ Métricas de paisagem calculadas para todos os buffers!\n")
+
+metricas_paisagem <- bind_rows(metricas_lista)
+
+cat("\n=== MÉTRICAS DA PAISAGEM POR BUFFER (CAMARAGIBE) ===\n")
+print(metricas_paisagem, row.names = FALSE)
+
+# ==============================================================================
+# MONTAGEM DO PAINEL DE PAISAGENS COMPACTADO
+# ==============================================================================
+lista_recortes <- list()
+
+for(i in 1:nrow(buffers_500m)) {
+  crop_i <- crop(Camaragibe_fator, buffers_500m[i, ])
+  mask_i <- mask(crop_i, buffers_500m[i, ])
+  
+  df_i <- as.data.frame(mask_i, xy = TRUE)
   colnames(df_i)[3] <- "Categoria"
   
-  # Converter Categoria para fator com os nomes corretos
-  df_i$Categoria <- factor(df_i$Categoria, 
-                           levels = c(3, 11, 21, 24, 33), 
-                           labels = c("Floresta", "Área Úmida", "Agropecuária", "Urbano", "Água"))
+  centro_x <- mean(df_i$x)
+  centro_y <- mean(df_i$y)
   
-  df_i$id_buffer <- paste("Paisagem", i)
+  df_i$x_relativo <- df_i$x - centro_x
+  df_i$y_relativo <- df_i$y - centro_y
+  
+  df_i$id_buffer <- paste("Paisagem", sprintf("%02d", i))
   lista_recortes[[i]] <- df_i
 }
 
 df_painel <- bind_rows(lista_recortes)
+df_painel$Categoria <- as.factor(df_painel$Categoria)
 
-# Plotando o Painel 5x3
+# Plotando o Painel
 ggplot(df_painel) +
-  geom_tile(aes(x = x, y = y, fill = Categoria)) +
-  scale_fill_manual(values = cores_legenda) +
-  facet_wrap(~id_buffer, nrow = 3, ncol = 5, scales = "free") +
+  geom_tile(aes(x = x_relativo, y = y_relativo, fill = Categoria)) +
+  scale_fill_manual(
+    values = cores_projeto,
+    labels = classes_projeto,
+    na.value = "transparent",
+    name = "Uso do Solo",
+    breaks = df_legenda$ID  
+  ) +
+  # Organização fluida em 4 colunas adaptada para a contagem real de pontos (11)
+  facet_wrap(~id_buffer, ncol = 4) + 
   theme_minimal() +
-  labs(title = "Painel de Amostragem: 15 Paisagens de Camaragibe-PE",
-       subtitle = "Recortes circulares de 500m de raio (Interior de Floresta)",
-       fill = "Uso do Solo") +
-  theme(axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        panel.grid = element_blank(),
-        legend.position = "bottom")
-
-````
-
-
+  labs(
+    title = "Painel de Amostragem: Unidades de Paisagem de Camaragibe-PE",
+    subtitle = "Janelas circulares de 500m de raio com coordenadas padronizadas",
+    fill = "Uso do Solo"
+  ) +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    strip.text = element_text(face = "bold", size = 10),
+    legend.position = "bottom",
+    plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+    plot.subtitle = element_text(size = 10, color = "gray30", hjust = 0.5)
+  )
+```
