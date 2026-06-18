@@ -34,6 +34,7 @@ print(mun_2024_utm)
 # Identificando 
 unique(mun_2024_utm)
 
+# criando legendas e definindo cores
 legenda <- data.frame(
   value = c(3,4,6,9,11,12,15,24,25,29,31,33,39,41),
   label = c(
@@ -83,6 +84,7 @@ ggplot() +
 check_landscape(mun_2024_utm)
 
 # Métricas para Landscape (paisagem)
+# diversidade 
 shannon <- lsm_l_shdi(mun_2024_utm)
 head(shannon)
 # Área total
