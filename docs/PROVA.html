@@ -1401,23 +1401,55 @@ max value   :        33 </code></pre>
 <span id="cb81-46"><a href="#cb81-46" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb81-47"><a href="#cb81-47" aria-hidden="true" tabindex="-1"></a>tabela_paisagens <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(lista_metricas)</span>
 <span id="cb81-48"><a href="#cb81-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-49"><a href="#cb81-49" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tabela_paisagens)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb81-49"><a href="#cb81-49" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tabela_paisagens, <span class="at">n =</span> <span class="cn">Inf</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 43 × 9
-   class  PLAND    NP    AI  EDGE ENN_MEAN Paisagem Classe                  SHDI
-   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;int&gt; &lt;chr&gt;                  &lt;dbl&gt;
- 1     3 55.7       7  95.3 37.5     145.         1 Formação Florestal     0.687
- 2    15 44.3       6  93.8 37.5     172.         1 Pastagem               0.687
- 3     3 37.4       5  97.3 18.7     275.         2 Formação Florestal     0.679
- 4    15 62.3       2  97.5 19.8     369.         2 Pastagem               0.679
- 5    41  0.284     2  69.4  1.16     59.7        2 Outras Lavouras Tempo… 0.679
- 6     3 14.4       3  96.0 12.3     275.         3 Formação Florestal     0.573
- 7    15 81.6       2  97.2 28.9      59.7        3 Pastagem               0.573
- 8    41  4.02     11  71.3 16.6     152.         3 Outras Lavouras Tempo… 0.573
- 9     3 51.9      17  97.2 23.7      84.7        4 Formação Florestal     0.692
-10    15 48.1       3  96.3 23.7     304.         4 Pastagem               0.692
-# ℹ 33 more rows</code></pre>
+   class    PLAND    NP    AI    EDGE ENN_MEAN Paisagem Classe              SHDI
+   &lt;int&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;int&gt; &lt;chr&gt;              &lt;dbl&gt;
+ 1     3  55.7        7  95.3 37.5       145.         1 Formação Florestal 0.687
+ 2    15  44.3        6  93.8 37.5       172.         1 Pastagem           0.687
+ 3     3  37.4        5  97.3 18.7       275.         2 Formação Florestal 0.679
+ 4    15  62.3        2  97.5 19.8       369.         2 Pastagem           0.679
+ 5    41   0.284      2  69.4  1.16       59.7        2 Outras Lavouras T… 0.679
+ 6     3  14.4        3  96.0 12.3       275.         3 Formação Florestal 0.573
+ 7    15  81.6        2  97.2 28.9        59.7        3 Pastagem           0.573
+ 8    41   4.02      11  71.3 16.6       152.         3 Outras Lavouras T… 0.573
+ 9     3  51.9       17  97.2 23.7        84.7        4 Formação Florestal 0.692
+10    15  48.1        3  96.3 23.7       304.         4 Pastagem           0.692
+11     3  34.5        3  97.8 17.0       362.         5 Formação Florestal 0.926
+12    15  56.2        2  93.8 46.7       239.         5 Pastagem           0.926
+13    39   0.309      1  67.5  1.45       NA          5 Soja               0.926
+14    41   9.03      26  73.5 31.4        83.0        5 Outras Lavouras T… 0.926
+15     3  59.5        1  99.3  7.24       NA          6 Formação Florestal 0.752
+16     6   0.0124     1  NA    0.0828     NA          6 Floresta Alagável  0.752
+17    12   0.680      3  84.2  2.44      867.         6 Formação Campestre 0.752
+18    15  39.1        1  98.1 12.6        NA          6 Pastagem           0.752
+19    25   0.445      1  96.7  1.16       NA          6 Outras Áreas Não … 0.752
+20    41   0.297      2  63.2  1.86      943.         6 Outras Lavouras T… 0.752
+21     3  94.9        2  99.1 10.6       123.         7 Formação Florestal 0.233
+22    12   1.47       2  87.5  3.73      775.         7 Formação Campestre 0.233
+23    15   3.66       5  84.2  9.65      103.         7 Pastagem           0.233
+24     3  84.6        1  98.9 11.6        NA          8 Formação Florestal 0.429
+25    15  15.4        2  96.1 11.6       801.         8 Pastagem           0.429
+26     3 100          1  99.9  0          NA          9 Formação Florestal 0    
+27    NA  NA         NA  NA   NA          NA          9 &lt;NA&gt;               0    
+28     3  25.3       18  90.2 34.7       186.        10 Formação Florestal 0.566
+29    15  74.7        2  96.6 34.7       119.        10 Pastagem           0.566
+30     3  67.0        4  97.5 20.3        95.0       11 Formação Florestal 0.634
+31    15  33.0        4  96.8 20.3       156.        11 Pastagem           0.634
+32     3  90.7        6  98.6 17.9        98.1       12 Formação Florestal 0.336
+33     6   0.804      2  88.5  1.86      161.        12 Floresta Alagável  0.336
+34    15   8.47       7  84.4 18.0       154.        12 Pastagem           0.336
+35     3  88.8        3  99.4  8.45      179.        13 Formação Florestal 0.351
+36    15  11.2        4  94.8  8.45      738.        13 Pastagem           0.351
+37     3 100          1  99.9  0          NA         14 Formação Florestal 0    
+38    NA  NA         NA  NA   NA          NA         14 &lt;NA&gt;               0    
+39     3   8.15       6  90.6 13.0       382.        15 Formação Florestal 0.323
+40    15  91.2        1  98.6 16.5        NA         15 Pastagem           0.323
+41    25   0.0495     1  75    0.249      NA         15 Outras Áreas Não … 0.323
+42    33   0.0742     1  85.7  0.331      NA         15 Rio, Lago e Oceano 0.323
+43    41   0.495      3  67.2  2.90      338.        15 Outras Lavouras T… 0.323</code></pre>
 </div>
 </div>
 <p>Através do sorteio de pontos conseguimos 2 paisagens com cobertura 100%, localizadas dentro do fragmento 1. Por sua vez, numa amostra aleatória podemos pegar paisagens pequenas, praticamente domindadas por pastagem.</p>

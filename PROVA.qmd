@@ -693,7 +693,7 @@ for(i in 1:nrow(buffers)) {
 
 tabela_paisagens <- bind_rows(lista_metricas)
 
-print(tabela_paisagens)
+print(tabela_paisagens, n = Inf)
 
 ```
 
