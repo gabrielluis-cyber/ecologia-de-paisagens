@@ -14,8 +14,7 @@ format:
 
 ## Escolha do munpicipio
 
-O município escolhido para avaliação foi "Bom Jesus do Tocantins (PA)". Importante não confundir com um município de mesmo nome no estado do Tocantins. A escolha se deu por conta do histórico do município. Nele existe a TI Mão Maria, terra indigena habitada pelos povos Gavião Akrãtikatêjê, Gavião Kykatejê, Gavião Parkatêjê e Guarani ( Guarani Mbya ); contando com um grande histórico de lutas e disputas. O município já foi vitíma do chamado "arco do desmatamento", que tranformou sua paisagem por completo. Como vamos ver a seguir, o munícipio teve sua composição e configuração completamente modificadas. 
-
+O município escolhido para avaliação foi "Bom Jesus do Tocantins (PA)". Importante não confundir com um município de mesmo nome no estado do Tocantins. A escolha se deu por conta do histórico do município. Nele existe a TI Mão Maria, terra indigena habitada pelos povos Gavião Akrãtikatêjê, Gavião Kykatejê, Gavião Parkatêjê e Guarani ( Guarani Mbya ); contando com um grande histórico de lutas e disputas. O município já foi vitíma do chamado "arco do desmatamento", que tranformou sua paisagem por completo. Como vamos ver a seguir, o munícipio teve sua composição e configuração completamente modificadas.
 
 ## Dados e processamento
 
@@ -182,8 +181,6 @@ ggplot() +
 
 Podemos observar que o municipio perdeu grande parte de sua vegetação nativa, sendo convertido em maior parte por pasto.
 
-
-
 ## Métricas de paisagem
 
 Podemos prosseguir para as análises de paisagem, seguindo o modelo Landscape, Class e Patch.
@@ -280,6 +277,7 @@ agregacao_tab <- agregacao %>%
 
 agregacao_tab
 ```
+
 Borda por classe:
 
 ```{r}
@@ -482,7 +480,8 @@ A distância entre alguns fragmentos é bem grande, o que pode ser uma barreira 
 
 Em 1985 Temos fragmentos muito maiores, com uma maior conectividade, falando apenas da formação florestal. O fragmento 1 (a TI) é muito maior e mais bem conectado a todos os outros. A fragmentação e os efeitos de borda são menores. A paisagem é um pouco mais homogenea, por conta da grande cobertura florestal
 
-Tabela final de métricas 
+Tabela final de métricas
+
 ```{r}
 #Tabelas finais
 
@@ -524,7 +523,6 @@ tabela_2024 <- reduce(
 print(tabela_2024)
 
 ```
-
 
 ### Sorteio de pontos
 
@@ -643,7 +641,6 @@ ggplot(df_painel) +
 
 ```
 
-
 Tabela de pontos
 
 ```{r}
@@ -700,83 +697,71 @@ print(tabela_paisagens)
 
 ```
 
-
 Através do sorteio de pontos conseguimos 2 paisagens com cobertura 100%, localizadas dentro do fragmento 1. Por sua vez, numa amostra aleatória podemos pegar paisagens pequenas, praticamente domindadas por pastagem.
 
 # Parte 2: Diagnóstico Ecológico
 
 ## Conectividade e metapopulações
 
-A paisagem de Bom Jesus do Tocantins não favorece o fluxo gênico entre todos os fragmentos. Como demonstrado por diversos artigos, a exemplo de Lima, et . al 2025; populações podem ser isoladas por distância ou barreiras. As matrizes possuem diferentes níveis de permeabilidade, sendo transponíveis ou intransponíveis, a depender da permeabilidade e do organismo em questão, como demonstrado por Rosa, et al. 2016; onde populações de abelhas tiveram melhor desempenho em matrizes agroflorestais, também apresentando um comportamento de fonte-sumidouro, o que pode acontecer em Bom Jesus.
+A paisagem de Bom Jesus do Tocantins possui alta conectividade, com muitos fragmentos menores funcionando como trampolins. Como demonstrado por diversos artigos, a exemplo de Lima, et . al 2025; populações podem ser isoladas por distância ou barreiras. As matrizes possuem diferentes níveis de permeabilidade, sendo transponíveis ou intransponíveis, a depender da permeabilidade e do organismo em questão, como demonstrado por Rosa, et al. 2016; onde populações de abelhas tiveram melhor desempenho em matrizes agroflorestais, também apresentando um comportamento de fonte-sumidouro, o que pode acontecer em Bom Jesus.
 
-O tipo matriz predominante em Bom Jesus do Tocantins é pouquissímo permeavel. O pasto representa uma grande barreira para a maior parte dos organismos (Zimmermann. 2010). Atualmente, a maior parte do município é composta por pasto. Junto a isso temos uma péssima configuração, com muito fragmentos pequenos. Contudo, o fragmento 1 (Terra Indigena Mãe Maria) é grande e bem preservado, podendo servir como fonte, seguindo o modelo de biogeografia de ilhas. Assim, os fragmentos mais próximos do 1 teriam maior fluxo gênico e os mais afastados, menos. Seguindo esse paradigma, mais próximo do continente = melhor desempenho, podemos observar o fragmento 1 como ponto central.
+O tipo matriz predominante em Bom Jesus do Tocantins é pouquissímo permeavel. O pasto representa uma grande barreira para a maior parte dos organismos (Zimmermann. 2010). Atualmente, a maior parte do município é composta por pasto. Junto a isso temos uma péssima configuração, com muito fragmentos pequenos. Contudo, o fragmento 1 (Terra Indigena Mãe Maria) é grande e bem preservado, podendo servir como fonte, seguindo o modelo de biogeografia de ilhas. Assim, os fragmentos mais próximos do 1 teriam maior fluxo gênico e os mais afastados, menor flow. Seguindo esse paradigma, mais próximo do continente = melhor desempenho, podemos observar o fragmento 1 como ponto central.
 
-Essa ideia se suporta por conta das menores distâncias entre os fragmentos na parte noroeste de Bom jesus, tendo o auxilío de manchas verdes como tranpolins para algumas espécies, além dos maiores tamanhos e configurações com menor efeito de borda aparente.
-
-Dessa forma, fragmentos distantes da Terra Indigena Mãe Maria teriam fluxo gênico menor, por conta da maior distância e menor quantidade de tranpolins; junto a um tamanho menor e configurações com maior efeito de borda. Também podemos esperar diferentes desempenhos para cada grupo biológico. Organismos voadores, tolerantes a maiores temperaturas e aridez vão desempenhar melhor que anuros, anelídeos, gastropodes e outros grupos com menor mobilidade e tolerância.
+A alta conectividade permite com que muitos desses fragmentos menores possuam contato com espécies advindas da TI. Isto pode favorecer até mesmo um bom modelo de agrofloresta, tendo em vista que a biodiversidade da TI pode atingir mais facilmente zonas distantes. A conectividade pode ser melhorada com o CAR e cumprimento de suas regras.
 
 ## Efeito de borda
 
-O mesmo causador da perda de fluxo gênico também causa o aumento do efeito de borda. Ao fragmentar e habitats e diminuir sua área de extensão, aumentamos o efeito de borda. O fragmento com menor efeito de borda é o 1. Nele podemos esperar encontrar especialistas de interior de floresta, ou até mesmo mamíferos de grande de porte, que possuem uma relação com grandes áreas. Nos fragmentos menores, podemos esperar grande ploriferação de espécies oportunistas, se aproveitando da luz e outros componentes de áreas com alto efeito de borda.
-O efeito de borda também prejudica a produtividade primária e o estoque de carbono, o que nos leva a acreditar que o fragmento 1 possua maior assimilaçao de carbono, como veremos a seguir.
-
+O mesmo causador da perda de fluxo gênico também pode causar o aumento do efeito de borda. Não é o caso de Bom Jesus. Temos alta conectividade e alta fragmentação. Ao fragmentar e habitats e diminuir sua área de extensão, aumentamos o efeito de borda. O fragmento com menor efeito de borda é o 1. Nele podemos esperar encontrar especialistas de interior de floresta, grandes árvores estrategistas K, com reprodução menor e crescimento lento; e outros organismos que precisam de áreas maiores livre. Nos fragmentos menores, podemos esperar grande ploriferação de espécies oportunistas, se aproveitando da luz e outros componentes de áreas com alto efeito de borda, além de espécies mais tolerantes a vento, alta temperatura, menor úmidade e outros. O efeito de borda também prejudica a produtividade primária e o estoque de carbono, o que nos leva a acreditar que o fragmento 1 possua maior assimilaçao de carbono, como veremos a seguir.
 
 ## Produtividade primária e estoque de carbono
 
-Com isso podemos esperar baixa produtiviade primária e um baixo estoque nos fragmentos menores. Coma a conversão de vegetação nativa para pasto, a capacidade de estocar carbono cai imensamente em ambientes Amazônicos (Fearnside. 1998). 
-Como podemos ver, a capacidade de estocar carbono era extremamente alta em 1985 e cai drasticamente para 2024. Devido a a agregação, o estado mais primitivo da floresta, a TI Mãe Maria é mais capaz de estocar carbono, mesmo que não exista grande diferença para outras áreas;
-![Estoque de carbono 1985](imagens/carbonoantigo.png)
-![Estoque de carbono 2024](imagens/carbonoatual.png)
-
+Com isso podemos esperar baixa produtiviade primária e um baixo estoque nos fragmentos menores. Coma a conversão de vegetação nativa para pasto, a capacidade de estocar carbono cai imensamente em ambientes Amazônicos (Fearnside. 1998). Como podemos ver, a capacidade de estocar carbono era extremamente alta em 1985 e cai drasticamente para 2024. Devido a a agregação, o estado mais primitivo da floresta, a TI Mãe Maria é mais capaz de estocar carbono, mesmo que não exista grande diferença para outras áreas; ![Estoque de carbono 1985](imagens/carbonoantigo.png) ![Estoque de carbono 2024](imagens/carbonoatual.png)
 
 ## Fluxos biogeoquímicos
 
-  As matas ciliares do Bom Jesus foram completamente afetadas pelo desmatamento e a queima. Afetando também as florestas alagadas, ambiente que teve grandes perdas e quase sumiu do mapa. O município ainda é abastecido em partes pelo corpo d'água presente em seu território, mas precisa de ajuda externa para o abastecimento. A qualidade da água também é muito criticada por moradores. 
-  Os processos biogeoquímicos do solo também podem estar afetados, tendo em vista que a queima da floresta gera resíduos que permanecem no solo durante muito tempo.
+As matas ciliares do Bom Jesus foram completamente afetadas pelo desmatamento e a queima. Afetando também as florestas alagadas, ambiente que teve grandes perdas e quase sumiu do mapa. O município ainda é abastecido em partes pelo corpo d'água presente em seu território, mas precisa de ajuda externa para o abastecimento. A qualidade da água também é muito criticada por moradores. Os processos biogeoquímicos do solo também podem estar afetados, tendo em vista que a queima da floresta gera resíduos que permanecem no solo durante muito tempo.
 
 ![Desmatamento](imagens/desmatamento.png)
 
 ![Fogo](imagens/fogo.png)
 
 # Parte 3: Análise de Ecologia Política
+
 ## Cadeia de explicação
+
 Bom Jesus do Tocantins é um município localizado na região sudeste do estado do Pará. Essa região é marcada por muitas lutas e forte ação do desmatamento, mineração, grilagem e outros. A população é formada por cerca de 18 mil habitantes (último censo em 2022), marcada por grande informalidade, tendo menos de 2 mil habitantes em empregos formais em 2013. A pirâmide etária se mostra muito larga na base e no corpo, com baixa população idosa; também apresetando baixo IDH (0,589). Com isso, a expectativa de vida é muito baixa do município, por conta da baixa saúde e más condições de trabalho. ![Pirâmide etária Bom Jesus do Tocantins](Imagens/piramideet2.png) Não existem dados sobre mortalidade infantil, porém o município é o 9° lugar em internações por diarréia no SUS, sendo 680,5 internações por 100 mil habitantes em 2024.
-  
-  A supressão de floresta foi veloz a terra ficou concentrada nas mãos de poucos. Os grandes empresários de terra estão envolvidos na política local. Sendo assim eles possuem grande capital financeiro e político. O modelo financeiro do lugar é de uma economia curta. Onde os trabalhadores se matam pra conseguir comprar comida para sobreviver. Os lucros da criação de gado se mantém entre os donos de terra. O pouco de agricultura que sobre sustenta muito poucos.
-  
-  Enquanto isso, a maior parte do município vive em condições precárias, onde nem mesmo quantificar é facil, tendo em vista a falta de informação para a cidade. Um dos indicares é o baixo IDH (0,589).
-  
-  Dentro de Bom Jesus, 3 entidades principais lutam entre si. Os indigenas, os integrantes de movimentos sem terra e os grileiros/Grande fazendeiros.
-  
+
+A supressão de floresta foi veloz a terra ficou concentrada nas mãos de poucos. Os grandes empresários de terra estão envolvidos na política local. Sendo assim eles possuem grande capital financeiro e político. O modelo financeiro do lugar é de uma economia curta. Onde os trabalhadores se matam pra conseguir comprar comida para sobreviver. Os lucros da criação de gado se mantém entre os donos de terra. O pouco de agricultura que sobre sustenta muito poucos.
+
+Enquanto isso, a maior parte do município vive em condições precárias, onde nem mesmo quantificar é facil, tendo em vista a falta de informação para a cidade. Um dos indicares é o baixo IDH (0,589).
+
+Dentro de Bom Jesus, 3 entidades principais lutam entre si. Os indigenas, os integrantes de movimentos sem terra e os grileiros/Grande fazendeiros.
 
 ## Mapeamento de atores
+
 ### A Terra Indigena Mãe Maria.
-  
-  Criada em 1986, previamente a Bom Jesus do Tocantins, através do  Decreto nº 93.148 de 20 de agosto de 1986, assinado por Sarney. A terra indigena é cortada pela estrada de ferro dos Carajás e possui uma linha de transmissão a cortando. A empresa Vale afirma pagar uma idenização mensal de 300 mil reais por mês.
-  
-  Os povos indigenas que Habitam a TI Mãe Maria são os povos gaviões. Que possuem um longo histórico de luta no local.
-  
-  ![TI por Satélite](imagens/timaps.png)
-  
-  ### Sem Terras
-  
-  Além disso, a região conta com integrantes do MST e outros movimentos, que travam embates constantes. Dois casos importantes se destacam. 
-  O primeiro, o Caso da Fazenda Gaúcha. Onde integrantes dos movimentos sem terra buscaram ocupar a fazenda, pedindo por melhores condições, reforma agrária e o fim da violência de campo. O que encontraram foi supressão armada, ferindo mortalmente algumas pessoas 
-  
-  ### Grileiros e grandes Latifundiários 
-  
-  Existem denúncias e apotamentos de grilagem de terra, manipulação, corrupção e violência. Até agora, nenhuma das acusações foram provadas, porém, assassinatos e violência de campo são algo comum na área. Os poucos que resolvem denunciar são, geralmente, jornalistas independentes.
-  Os Grandes fazendeiros são os que ganham com todo o caos do lugar. Utilizar da terra para produzir gado e vender para o mercado externo é vantajoso para eles. A medida que eles esgotam a terra, lucram. Se a terra exaurir, vão busar mais, custe o que custar.
-  
+
+Criada em 1986, previamente a Bom Jesus do Tocantins, através do Decreto nº 93.148 de 20 de agosto de 1986, assinado por Sarney. A terra indigena é cortada pela estrada de ferro dos Carajás e possui uma linha de transmissão a cortando. A empresa Vale afirma pagar uma idenização mensal de 300 mil reais por mês.
+
+Os povos indigenas que Habitam a TI Mãe Maria são os povos gaviões. Que possuem um longo histórico de luta no local.
+
+![TI por Satélite](imagens/timaps.png)
+
+\### Sem Terras
+
+Além disso, a região conta com integrantes do MST e outros movimentos, que travam embates constantes. Dois casos importantes se destacam. O primeiro, o Caso da Fazenda Gaúcha. Onde integrantes dos movimentos sem terra buscaram ocupar a fazenda, pedindo por melhores condições, reforma agrária e o fim da violência de campo. O que encontraram foi supressão armada, ferindo mortalmente algumas pessoas
+
+\### Grileiros e grandes Latifundiários
+
+Existem denúncias e apotamentos de grilagem de terra, manipulação, corrupção e violência. Até agora, nenhuma das acusações foram provadas, porém, assassinatos e violência de campo são algo comum na área. Os poucos que resolvem denunciar são, geralmente, jornalistas independentes. Os Grandes fazendeiros são os que ganham com todo o caos do lugar. Utilizar da terra para produzir gado e vender para o mercado externo é vantajoso para eles. A medida que eles esgotam a terra, lucram. Se a terra exaurir, vão busar mais, custe o que custar.
+
 ## Linha do tempo
-  O município possui uma criação recente, datando de 1988. Por volta da decada de 60, Bom Jesus era pouco habitado e fazia parte de outro municipio. Com o interesse agrário no local, na intenção de estabelecer roças, o município foi populado e posteriormente fundado oficialmente. 
-  Como dito antes, a criação da TI Mãe Maria é previa a de Bom Jesus. Contudo, os povos gaviões já eram perseguidos previamente. Ocorreu uma certa tentativa de pacificar os povos gaviões, o que resultou numa perda de 70% da sua população total. Ainda hoje, eles lutam para se reerguerem. 
-  Na primeira metade do século XX, os "Gaviões de oeste" se distribuiam em três unidades locais autodenominadas conforme a posição que ocupavam na bacia do rio Tocantins. Uma delas chamou-se Parkatêjê (onde par é pé, jusante; katê é dono; e jê é povo), "o povo de jusante", enquanto outra, Kyikatêjê (onde kyi é cabeça), "o povo de montante", porque, no começo do século XX, por motivo de guerra entre as duas, a primeira refugiou-se a montante do rio Tocantins, já no Estado do Maranhão). A terceira unidade, que ficou conhecida como "turma da Montanha" conforme sua autodenominação Akrãtikatêjê (onde akrãti é montanha), ocupava as cabeceiras do rio Capim.
-  A Criação da PA-322, futuramente convertida em BR-222, foi a primeira ligação de Bom Jesus com a transamazôncia. A construção desta rodovia acelerou a ocupação efetiva e desordenada daquela porção da Amazônia, favorecendo a invasão sistemática e crescente da terra dos Gaviões, tanto por agricultores como por obras estatais de infra-estrutura dos projetos que viriam a se instalar na região.
+
+O município possui uma criação recente, datando de 1988. Por volta da decada de 60, Bom Jesus era pouco habitado e fazia parte de outro municipio. Com o interesse agrário no local, na intenção de estabelecer roças, o município foi populado e posteriormente fundado oficialmente. Como dito antes, a criação da TI Mãe Maria é previa a de Bom Jesus. Contudo, os povos gaviões já eram perseguidos previamente. Ocorreu uma certa tentativa de pacificar os povos gaviões, o que resultou numa perda de 70% da sua população total. Ainda hoje, eles lutam para se reerguerem. Na primeira metade do século XX, os "Gaviões de oeste" se distribuiam em três unidades locais autodenominadas conforme a posição que ocupavam na bacia do rio Tocantins. Uma delas chamou-se Parkatêjê (onde par é pé, jusante; katê é dono; e jê é povo), "o povo de jusante", enquanto outra, Kyikatêjê (onde kyi é cabeça), "o povo de montante", porque, no começo do século XX, por motivo de guerra entre as duas, a primeira refugiou-se a montante do rio Tocantins, já no Estado do Maranhão). A terceira unidade, que ficou conhecida como "turma da Montanha" conforme sua autodenominação Akrãtikatêjê (onde akrãti é montanha), ocupava as cabeceiras do rio Capim. A Criação da PA-322, futuramente convertida em BR-222, foi a primeira ligação de Bom Jesus com a transamazôncia. A construção desta rodovia acelerou a ocupação efetiva e desordenada daquela porção da Amazônia, favorecendo a invasão sistemática e crescente da terra dos Gaviões, tanto por agricultores como por obras estatais de infra-estrutura dos projetos que viriam a se instalar na região.
 
 Mais tarde, a terra indígena foi ainda cortada pela linha de transmissão da Eletronorte, originada na Usina Hidroelétrica de Tucuruí, e, em 1982, pela Estrada de Ferro Carajás.
 
-Esses processos levaram a aceleração da tomada de terra. 
+Esses processos levaram a aceleração da tomada de terra.
 
 Os Indigenas em muito foram suprimidos. O dinheiro advindo do acordo com a Vale para construção da Ferrovia (7 milhões) nunca chegou realmente nas mãos dos Gaviões.
 
@@ -784,35 +769,23 @@ Não há muita informação sobre como a terra foi sendo tomada. O que temos sã
 
 ![Desmatamento](Imagens/desmatamentoti.png)
 
-
-Os Sem-Terra, em especial, relatam invasões em acapamentos, assassinatos, pistolagens e outros tipos de violência. 
+Os Sem-Terra, em especial, relatam invasões em acapamentos, assassinatos, pistolagens e outros tipos de violência.
 
 # Parte 4: Proposta de Manejo Integrado
 
-  Bom Jesus do Tocantins representa um grande desafio, tendo em vista a natureza do local para carecer de informações. Mas existem alguns passos importantes a serem tomados, visando restruturar um pouco do local.
+Bom Jesus do Tocantins representa um grande desafio, tendo em vista a natureza do local para carecer de informações. Mas existem alguns passos importantes a serem tomados, visando restruturar um pouco do local.
 
 ## Diagnóstico integrado
 
-  O município de Bom Jesus do Tocantins apresenta problemas que precisam ser resolvidos com prioridade. A destruição de matas ciliares e a pouca conectividade entre os fragmentos representam dois grandes problemas que podem ser resolvidos com manejo. Há também o problema da violência do campo, associada com a grilagem e desmatamento.
-  A proteção da TI Mãe Maria, a criação de uma economia viável, a luta contra a violência e outros objetivos também são necessários.
+O município de Bom Jesus do Tocantins apresenta problemas que precisam ser resolvidos com prioridade. A destruição de matas ciliares representa um grande problema que pode ser resolvido com bom manejo e cumprimento do Código Florestal. Junto ao cumprimento do Código Florestal, o a regulação das RL's podem trazer fragmentos . Há também o problema da violência do campo, associada com a grilagem e desmatamento. A proteção da TI Mãe Maria, a criação de uma economia viável, a luta contra a violência e outros objetivos também são necessários.
 
 ## Objetivos e intervenções
-  
-  Recuperação das APPS, promovendo o reestabelecimento das matas ciliares, visando minimizar os impactos em corpos d'água, forncecer água de melhor qualidade a longo prazo e restaurar as florestas alagadas.
-  Recuperação de, ao menos, 20% das matas da parte norte do município, visando aumentar a área de fragmentos já existentes e aumentando o habitat fonte.
-  Regulação fundiária visando diminuir a violência em campo.
-  Ação conjunta ao Movimentos Sem-Terra e a regulação fundiária, fornecendo terra e promovendo agriculturas voltadas para o mercado interno, visando diminuir a fome e contruir uma matriz agroflorestal mais tolerante, funcionando como corredor.
-  Regularização do CAR, visando restabelecer as RL's.
-  
+
+Recuperação das APPS, promovendo o reestabelecimento das matas ciliares, visando minimizar os impactos em corpos d'água, forncecer água de melhor qualidade a longo prazo e restaurar as florestas alagadas. Recuperação de, ao menos, 20% das matas da parte norte do município, visando aumentar a área de fragmentos já existentes visando diminuir o efeito de mudiouro e de borda. Regulação fundiária visando diminuir a violência em campo. Ação conjunta ao Movimentos Sem-Terra e a regulação fundiária, fornecendo terra e promovendo agriculturas voltadas para o mercado interno, visando diminuir a fome e contruir uma matriz agroflorestal mais tolerante, funcionando como corredor. Regularização do CAR, visando restabelecer as RL's.
 
 ## Governança e monitoramento
-  Monitoramento da vegetação nativa
-    - Da formação florestal nos fragmentos norte
-    - Da APPS ao redor dos corpos d'água, através da vegetação de floresta alagada.
-    Monitorar os indices de conflitos agrários e violência em campo. 
-    Monitorar os números de CAR regularizados.
-    Monitorar o estabelcimento e o sucesso de sistesmas agroglorestais
-    
+
+Monitoramento da vegetação nativa - Da formação florestal nos fragmentos norte - Da APPS ao redor dos corpos d'água, através da vegetação de floresta alagada. Monitorar os indices de conflitos agrários e violência em campo. Monitorar os números de CAR regularizados. Monitorar o estabelcimento e o sucesso de sistesmas agroglorestais
 
 # Referências de artigos:
 
@@ -826,6 +799,4 @@ FEARNSIDE, Philip M.; BARBOSA, Reinaldo Imbrozio. Soil carbon changes from conve
 
 # Referências gerais:
 
-https://terrasindigenas.org.br/pt-br/terras-indigenas/3750#noticias https://bomjesusdotocantins.pa.gov.br/ https://cidades.ibge.gov.br/brasil/pa/bom-jesus-do-tocantins/panorama https://g1.globo.com/pa/para/noticia/2026/05/19/empresarios-sao-investigados-por-crimes-sexuais-contra-criancas-e-adolescentes-no-sudeste-do-para.ghtml https://g1.globo.com/pa/para/noticia/2026/05/19/empresarios-sao-investigados-por-crimes-sexuais-contra-criancas-e-adolescentes-no-sudeste-do- https://globoplay.globo.com/v/14627533/ https://portalcidadeatual.com.br/bom-jesus/moradores-de-bom-jesus-do-tocantins-denunciam-desvio-de-recursos-do-programa-sua-casa-da-cohab-pa https://www.hiroshibogea.com.br/fazenda-gaucha-mais-uma-questao-fundiaria-no-para-mal-resolvida/ https://mapadeconflitos.ensp.fiocruz.br/conflito/pa-trabalhadores-rurais-sem-terra-lutam-pela-vida-e-por-regularizacao-fundiaria-no-acampamento-nova-esperanca/ https://globoplay.globo.com/v/6167904/ https://g1.globo.com/pa/para/noticia/2026/03/16/protesto-indigena-bloqueia-estrada-de-ferro-carajas-no-para.ghtml
-https://pib.socioambiental.org/pt/Povo:Gavi%C3%A3o_Parkat%C3%AAj%C3%AA
-https://anovademocracia.com.br/pa-camponeses-resistem-a-pistoleiros-em-acampamento-no-bom-jesus-do-tocantins/
+https://terrasindigenas.org.br/pt-br/terras-indigenas/3750#noticias https://bomjesusdotocantins.pa.gov.br/ https://cidades.ibge.gov.br/brasil/pa/bom-jesus-do-tocantins/panorama https://g1.globo.com/pa/para/noticia/2026/05/19/empresarios-sao-investigados-por-crimes-sexuais-contra-criancas-e-adolescentes-no-sudeste-do-para.ghtml https://g1.globo.com/pa/para/noticia/2026/05/19/empresarios-sao-investigados-por-crimes-sexuais-contra-criancas-e-adolescentes-no-sudeste-do- https://globoplay.globo.com/v/14627533/ https://portalcidadeatual.com.br/bom-jesus/moradores-de-bom-jesus-do-tocantins-denunciam-desvio-de-recursos-do-programa-sua-casa-da-cohab-pa https://www.hiroshibogea.com.br/fazenda-gaucha-mais-uma-questao-fundiaria-no-para-mal-resolvida/ https://mapadeconflitos.ensp.fiocruz.br/conflito/pa-trabalhadores-rurais-sem-terra-lutam-pela-vida-e-por-regularizacao-fundiaria-no-acampamento-nova-esperanca/ https://globoplay.globo.com/v/6167904/ https://g1.globo.com/pa/para/noticia/2026/03/16/protesto-indigena-bloqueia-estrada-de-ferro-carajas-no-para.ghtml https://pib.socioambiental.org/pt/Povo:Gavi%C3%A3o_Parkat%C3%AAj%C3%AA https://anovademocracia.com.br/pa-camponeses-resistem-a-pistoleiros-em-acampamento-no-bom-jesus-do-tocantins/
