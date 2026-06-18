@@ -1,0 +1,184 @@
+---
+title: "Avaliação ecologia de paisagens"
+format:
+  html:
+    code-fold: true
+---
+# Introdução
+
+## Escolha do munpicipio
+
+O município escolhido para avaliação foi "Bom Jesus do Tocantins (PA)". Importante não confundir com um município de mesmo nome no estado do Tocantins. A escolha se deu por conta do histórico do município. Nele existe a TI Mão Maria, terra indigena habitada pelos povos Gavião Akrãtikatêjê, Gavião Kykatejê, Gavião Parkatêjê e Guarani ( Guarani Mbya ); contando com um grande histórico de lutas e disputas. O município já foi vitíma do chamado "arco do desmatamento", que tranformou sua paisagem por completo. Como vamos ver a seguir, o munícipio teve sua composição e configuração completamente modificadas. U
+
+## Panorama geral
+
+Bom Jesus do Tocantins é um município localizado na região sudeste do estado do Pará. Essa região é marcada por muitas lutas e forte ação do desmatamento, mineração, grilagem e outros. A população é formada por cerca de 18 mil habitantes (último censo em 2022), marcada por grande informalidade, tendo menos de 2 mil habitantes em empregos formais em 2013. A pirâmide etária se mostra muito larga na base e no corpo, com baixa população idosa; também apresetando baixo IDH (0,589). Com isso, a expectativa de vida é muito baixa do município, por conta da baixa saúde e más condições de trabalho. ![Pirâmide etária Bom Jesus do Tocantins](Imagens/piramideet2.png) Não existem dados sobre mortalidade infantil, porém o município é o 9° lugar em internações por diarréia no SUS, sendo 680,5 internações por 100 mil habitantes em 2024.
+
+## Histórico Politico
+
+Bom Jesus do Tocantins guarda alguns escândalos em sua historia - Escandalo Sexual com Menores de idade ![G1](Imagens/noticia%201.png) - Escandalo do programa "Sua Casa", destinado para construção de moradia popular ![Portal Cidade Atual](imagens/noticia%202.png) - Fazenda Gaúcha ![G1 e Hiroshi Braga Online](Imagens/Noticia%203.png) \## Lutas
+
+O MST e outros motivmentos atuam no local. Pedindo pela regulação fundiária e por diversas reformas. Normalmente, são reprimidos com uso de violência. Junto a isso, ocorreram diversos protestos. Um importante ocorreu na BR-222, pedindo por reforma agrária, infraestrutura para acampamentos de sem terra e pelo fim da violência de campo. ![Mapa de conflitos FioCruZ](Imagens/Noticia%204.png) A luta Indigena também é forte da área. Eles reivindicam a consulta prévia sobre duplicação da Estrada de Ferro Carajás, além de denunciar violência e impactos ambientais. ![G1 e TV Liberal](imagens/noticia%205.png)
+
+# Análise ecológica do Município
+
+  Os rasters foram obtidos através da Plataforma MapBiomas, na coleção 10. Foram utilizados dois Rasters para Bom Jesus do Tocantins (PA). O principal para as análises é de 2024 (último ano disponivel na atual data), o segundo é de 1985, o raster mais antigo diponível, servindo de comparação com o atual.
+  
+### Carregando os Pacotes e Rasters
+``` {r}
+# Carregando os pacotes necessários 
+
+library("terra")
+library("sf")
+library("landscapemetrics")
+library("tmap")
+library("ggplot2")
+library("vegan")
+library("tidyverse")
+library("rgbif")
+library("geodata")
+library("geobr")
+library("tidyterra")
+library("dplyr")
+
+cat("✓ Todos os pacotes carregados com sucesso!\n")
+
+# Carregando o Raster de Bom Jesus do Tocantins (PA)
+mun_2024 <- rast("toca_2024.tif")
+# Carregando o Raster de Bom Jesus do Tocantins (PA) 1985
+mun_1985 <- rast("toca_1985.tif")
+
+
+```
+
+Com os Rasters carregados, podemos seguir para as configurações.
+
+```{r}
+# Buscando dados do IBGE
+geobr::read_municipality(1501576)
+
+# Configurando coordenadas (Lat-long --> metros)
+mun_2024_utm <- project(mun_2024, "EPSG:31982", method = "near")
+
+# Verficando configuração
+print(mun_2024_utm)
+
+# Identificando 
+unique(mun_2024_utm)
+```
+
+Para 1985
+
+``` {r}
+# Configurando coordenadas (Lat-long --> metros)
+mun_1985_utm <- project(mun_1985, "EPSG:31982", method = "near")
+
+# Verficando configuração
+print(mun_1985_utm)
+
+# Identificando 
+unique(mun_1985_utm)
+```
+
+Agora podemos plotar os gráficos e vizualizar o município.
+
+```{R}
+# criando legendas e definindo cores
+legenda <- data.frame(
+  value = c(3,4,6,9,11,12,15,24,25,29,31,33,39,41),
+  label = c(
+    "Formação Florestal",
+    "Formação Savânica",
+    "Floresta Alagável",
+    "Floresta Plantada",
+    "Campo Alagado e Área Pantanosa",
+    "Formação Campestre",
+    "Pastagem",
+    "Área Urbanizada",
+    "Outras Áreas Não Vegetadas",
+    "Afloramento Rochoso",
+    "Aquicultura",
+    "Rio, Lago e Oceano",
+    "Soja",
+    "Outras Lavouras Temporárias"
+  )
+)
+cores <- c(
+  "#1f8d49", # 3  Formação Florestal
+  "#7dc975", # 4  Formação Savânica
+  "#04381d", # 6  Floresta Alagável
+  "#7a5900", # 9  Floresta Plantada
+  "#519799", # 11 Campo Alagado e Área Pantanosa
+  "#d6bc74", # 12 Formação Campestre
+  "#edde8e", # 15 Pastagem
+  "#d4271e", # 24 Área Urbanizada
+  "#db4d4f", # 25 Outras Áreas Não Vegetadas
+  "#ffaa5f", # 29 Afloramento Rochoso
+  "#9c0027", # 31 Aquicultura
+  "#2532e4", # 33 Rio, Lago e Oceano
+  "#f5b3c8", # 39 Soja
+  "#ffefc3"  # 41 Outras Lavouras Temporárias
+)
+legenda$Cor <- cores
+levels(mun_2024_utm) <- legenda[,1:2]
+
+# Vendo o resultado 
+ggplot() +
+  geom_spatraster(data = mun_2024_utm) +
+  scale_fill_manual(values = cores, na.value = "transparent") +
+  labs(title = "Bom Jesus do Tocantins 2024") +
+  theme_minimal()
+
+```
+
+Para 1985
+
+```{R}
+legenda1985 <- data.frame(
+  value = c(3,4,6,9,11,12,15,24,25,29,31,33,39,41),
+  label = c(
+    "Formação Florestal",
+    "Formação Savânica",
+    "Floresta Alagável",
+    "Floresta Plantada",
+    "Campo Alagado e Área Pantanosa",
+    "Formação Campestre",
+    "Pastagem",
+    "Área Urbanizada",
+    "Outras Áreas Não Vegetadas",
+    "Afloramento Rochoso",
+    "Aquicultura",
+    "Rio, Lago e Oceano",
+    "Soja",
+    "Outras Lavouras Temporárias"
+  )
+)
+cores1985 <- c(
+  "Formação Florestal" = "#1f8d49",
+  "Formação Savânica" = "#7dc975",
+  "Floresta Alagável" = "#04381d",
+  "Floresta Plantada" = "#7a5900",
+  "Campo Alagado e Área Pantanosa" = "#519799",
+  "Formação Campestre" = "#d6bc74",
+  "Pastagem" = "#edde8e",
+  "Área Urbanizada" = "#d4271e",
+  "Outras Áreas Não Vegetadas" = "#db4d4f",
+  "Afloramento Rochoso" = "#ffaa5f",
+  "Aquicultura" = "#9c0027",
+  "Rio, Lago e Oceano" = "#2532e4",
+  "Soja" = "#f5b3c8",
+  "Outras Lavouras Temporárias" = "#ffefc3"
+)
+legenda1985$Cor1985 <- cores1985
+levels(mun_1985_utm) <- legenda1985[,1:2]
+
+# Vendo o resultado 1985
+ggplot() +
+  geom_spatraster(data = mun_1985_utm) +
+  scale_fill_manual(values = cores1985, na.value = "transparent") +
+  labs(title = "Bom Jesus do Tocantins 1985") +
+  theme_minimal()
+```
+# Referências:
+
+https://terrasindigenas.org.br/pt-br/terras-indigenas/3750#noticias https://bomjesusdotocantins.pa.gov.br/ https://cidades.ibge.gov.br/brasil/pa/bom-jesus-do-tocantins/panorama https://g1.globo.com/pa/para/noticia/2026/05/19/empresarios-sao-investigados-por-crimes-sexuais-contra-criancas-e-adolescentes-no-sudeste-do-para.ghtml https://g1.globo.com/pa/para/noticia/2026/05/19/empresarios-sao-investigados-por-crimes-sexuais-contra-criancas-e-adolescentes-no-sudeste-do- https://globoplay.globo.com/v/14627533/ https://portalcidadeatual.com.br/bom-jesus/moradores-de-bom-jesus-do-tocantins-denunciam-desvio-de-recursos-do-programa-sua-casa-da-cohab-pa https://www.hiroshibogea.com.br/fazenda-gaucha-mais-uma-questao-fundiaria-no-para-mal-resolvida/ https://mapadeconflitos.ensp.fiocruz.br/conflito/pa-trabalhadores-rurais-sem-terra-lutam-pela-vida-e-por-regularizacao-fundiaria-no-acampamento-nova-esperanca/ https://globoplay.globo.com/v/6167904/ https://g1.globo.com/pa/para/noticia/2026/03/16/protesto-indigena-bloqueia-estrada-de-ferro-carajas-no-para.ghtml

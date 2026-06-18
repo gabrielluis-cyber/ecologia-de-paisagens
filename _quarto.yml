@@ -10,6 +10,8 @@ website:
         text: Home
       - href: Exercicios qmd.qmd
         text: Exercicios
+      - href: PROVA.qmd
+        text: Avaliação
       - about.qmd
 
 format:
