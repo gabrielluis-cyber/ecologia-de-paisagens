@@ -4,6 +4,7 @@ editor_options:
   chunk_output_type: inline
 ---
 
+*att 17/06*
 *Este workbook foi desenvolvido para a disciplina "Ecologia de paisagens" da UFPE, ministrada pelo professor doutor Felipe Melo.*
 
 # *Como fiz o workbook?*
