@@ -287,3 +287,21 @@ ggplot(df_painel) +
         panel.grid = element_blank(),
         legend.position = "bottom")
 
+agregacao <- lsm_c_ai(mun_2024_utm)
+print(agregacao)
+
+agregacao_tab <- agregacao %>%
+  mutate(
+    classe_nome = legendatab[as.character(class)]
+  ) %>%
+  select(
+    classe_nome,
+    value
+  ) %>%
+  rename(
+    Classe = classe_nome,
+    AI = value
+  ) %>%
+  arrange(desc(AI))
+
+agregacao_tab

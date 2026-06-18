@@ -482,6 +482,50 @@ A distância entre alguns fragmentos é bem grande, o que pode ser uma barreira 
 
 Em 1985 Temos fragmentos muito maiores, com uma maior conectividade, falando apenas da formação florestal. O fragmento 1 (a TI) é muito maior e mais bem conectado a todos os outros. A fragmentação e os efeitos de borda são menores. A paisagem é um pouco mais homogenea, por conta da grande cobertura florestal
 
+Tabela final de métricas 
+```{r}
+#Tabelas finais
+
+#Tabela final paisagem completa
+
+pland <- lsm_c_pland(mun_2024_utm)
+np <- lsm_c_np(mun_2024_utm)
+ai <- lsm_c_ai(mun_2024_utm)
+edge <- lsm_c_ed(mun_2024_utm)
+enn <- lsm_c_enn_mn(mun_2024_utm)
+
+
+library(purrr)
+
+tabela_2024 <- reduce(
+  list(
+    pland %>% select(class, value) %>% rename(PLAND = value),
+    np %>% select(class, value) %>% rename(NP = value),
+    ai %>% select(class, value) %>% rename(AI = value),
+    edge %>% select(class, value) %>% rename(EDGE = value),
+    enn %>% select(class, value) %>% rename(ENN_MEAN = value)
+  ),
+  full_join,
+  by = "class"
+) %>%
+  mutate(
+    Classe = legendatab[as.character(class)]
+  ) %>%
+  select(
+    Classe,
+    PLAND,
+    NP,
+    AI,
+    EDGE,
+    ENN_MEAN
+  ) %>%
+  arrange(desc(PLAND))
+
+print(tabela_2024)
+
+```
+
+
 ### Sorteio de pontos
 
 Aqui faremos um sorteio de 15 pontos dentro do Raster de 2024, visando obter, aleatoriamente, 15 buffers de 1500m. Através desses buffers, podemos realizar uma amostragem aleatória da paisagem.
@@ -598,6 +642,64 @@ ggplot(df_painel) +
 
 
 ```
+
+
+Tabela de pontos
+
+```{r}
+
+# Tabela de Pontos
+
+library(purrr)
+library(dplyr)
+library(landscapemetrics)
+
+lista_metricas <- list()
+
+for(i in 1:nrow(buffers)) {
+  
+  # recorta a paisagem
+  r_i <- crop(mun_2024_utm, buffers[i, ])
+  r_i <- mask(r_i, buffers[i, ])
+  
+  # métricas da paisagem
+  shdi <- lsm_l_shdi(r_i)$value
+  
+  # métricas de classe
+  pland <- lsm_c_pland(r_i)
+  np <- lsm_c_np(r_i)
+  ai <- lsm_c_ai(r_i)
+  edge <- lsm_c_ed(r_i)
+  enn <- lsm_c_enn_mn(r_i)
+  
+  tabela_i <- reduce(
+    list(
+      pland %>% select(class, value) %>% rename(PLAND = value),
+      np %>% select(class, value) %>% rename(NP = value),
+      ai %>% select(class, value) %>% rename(AI = value),
+      edge %>% select(class, value) %>% rename(EDGE = value),
+      enn %>% select(class, value) %>% rename(ENN_MEAN = value)
+    ),
+    full_join,
+    by = "class"
+  )
+  
+  tabela_i <- tabela_i %>%
+    mutate(
+      Paisagem = i,
+      Classe = legendatab[as.character(class)],
+      SHDI = shdi
+    )
+  
+  lista_metricas[[i]] <- tabela_i
+}
+
+tabela_paisagens <- bind_rows(lista_metricas)
+
+print(tabela_paisagens)
+
+```
+
 
 Através do sorteio de pontos conseguimos 2 paisagens com cobertura 100%, localizadas dentro do fragmento 1. Por sua vez, numa amostra aleatória podemos pegar paisagens pequenas, praticamente domindadas por pastagem.
 
