@@ -164,11 +164,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#parte-1-análise-descritiva-da-paisagem" id="toc-parte-1-análise-descritiva-da-paisagem" class="nav-link active" data-scroll-target="#parte-1-análise-descritiva-da-paisagem">Parte 1: Análise Descritiva da Paisagem</a>
   <ul class="collapse">
   <li><a href="#escolha-do-munpicipio" id="toc-escolha-do-munpicipio" class="nav-link" data-scroll-target="#escolha-do-munpicipio">Escolha do munpicipio</a></li>
-  </ul></li>
-  <li><a href="#parte-3-análise-de-ecologia-política" id="toc-parte-3-análise-de-ecologia-política" class="nav-link" data-scroll-target="#parte-3-análise-de-ecologia-política">Parte 3: Análise de Ecologia Política</a>
-  <ul class="collapse">
-  <li><a href="#panorama-geral" id="toc-panorama-geral" class="nav-link" data-scroll-target="#panorama-geral">Panorama geral</a></li>
-  <li><a href="#histórico-politico" id="toc-histórico-politico" class="nav-link" data-scroll-target="#histórico-politico">Histórico Politico</a></li>
   <li><a href="#dados-e-processamento" id="toc-dados-e-processamento" class="nav-link" data-scroll-target="#dados-e-processamento">Dados e processamento</a>
   <ul class="collapse">
   <li><a href="#carregando-os-pacotes-e-rasters" id="toc-carregando-os-pacotes-e-rasters" class="nav-link" data-scroll-target="#carregando-os-pacotes-e-rasters">Carregando os Pacotes e Rasters</a></li>
@@ -182,7 +177,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#parte-2-diagnóstico-ecológico" id="toc-parte-2-diagnóstico-ecológico" class="nav-link" data-scroll-target="#parte-2-diagnóstico-ecológico">Parte 2: Diagnóstico Ecológico</a>
   <ul class="collapse">
   <li><a href="#conectividade-e-metapopulações" id="toc-conectividade-e-metapopulações" class="nav-link" data-scroll-target="#conectividade-e-metapopulações">Conectividade e metapopulações</a></li>
+  <li><a href="#efeito-de-borda" id="toc-efeito-de-borda" class="nav-link" data-scroll-target="#efeito-de-borda">Efeito de borda</a></li>
   <li><a href="#produtividade-primária-e-estoque-de-carbono" id="toc-produtividade-primária-e-estoque-de-carbono" class="nav-link" data-scroll-target="#produtividade-primária-e-estoque-de-carbono">Produtividade primária e estoque de carbono</a></li>
+  <li><a href="#fluxos-biogeoquímicos" id="toc-fluxos-biogeoquímicos" class="nav-link" data-scroll-target="#fluxos-biogeoquímicos">Fluxos biogeoquímicos</a></li>
+  </ul></li>
+  <li><a href="#parte-3-análise-de-ecologia-política" id="toc-parte-3-análise-de-ecologia-política" class="nav-link" data-scroll-target="#parte-3-análise-de-ecologia-política">Parte 3: Análise de Ecologia Política</a>
+  <ul class="collapse">
+  <li><a href="#cadeia-de-explicação" id="toc-cadeia-de-explicação" class="nav-link" data-scroll-target="#cadeia-de-explicação">Cadeia de explicação</a></li>
+  <li><a href="#mapeamento-de-atores" id="toc-mapeamento-de-atores" class="nav-link" data-scroll-target="#mapeamento-de-atores">Mapeamento de atores</a>
+  <ul class="collapse">
+  <li><a href="#a-terra-indigena-mãe-maria." id="toc-a-terra-indigena-mãe-maria." class="nav-link" data-scroll-target="#a-terra-indigena-mãe-maria.">A Terra Indigena Mãe Maria.</a></li>
+  </ul></li>
+  <li><a href="#linha-do-tempo" id="toc-linha-do-tempo" class="nav-link" data-scroll-target="#linha-do-tempo">Linha do tempo</a></li>
+  </ul></li>
+  <li><a href="#parte-4-proposta-de-manejo-integrado" id="toc-parte-4-proposta-de-manejo-integrado" class="nav-link" data-scroll-target="#parte-4-proposta-de-manejo-integrado">Parte 4: Proposta de Manejo Integrado</a>
+  <ul class="collapse">
+  <li><a href="#diagnóstico-integrado" id="toc-diagnóstico-integrado" class="nav-link" data-scroll-target="#diagnóstico-integrado">Diagnóstico integrado</a></li>
+  <li><a href="#objetivos-e-intervenções" id="toc-objetivos-e-intervenções" class="nav-link" data-scroll-target="#objetivos-e-intervenções">Objetivos e intervenções</a></li>
+  <li><a href="#governança-e-monitoramento" id="toc-governança-e-monitoramento" class="nav-link" data-scroll-target="#governança-e-monitoramento">Governança e monitoramento</a></li>
   </ul></li>
   <li><a href="#referências-de-artigos" id="toc-referências-de-artigos" class="nav-link" data-scroll-target="#referências-de-artigos">Referências de artigos:</a></li>
   <li><a href="#referências-gerais" id="toc-referências-gerais" class="nav-link" data-scroll-target="#referências-gerais">Referências gerais:</a></li>
@@ -228,19 +240,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Parte 1: Análise Descritiva da Paisagem</h1>
 <section id="escolha-do-munpicipio" class="level2">
 <h2 class="anchored" data-anchor-id="escolha-do-munpicipio">Escolha do munpicipio</h2>
-<p>O município escolhido para avaliação foi “Bom Jesus do Tocantins (PA)”. Importante não confundir com um município de mesmo nome no estado do Tocantins. A escolha se deu por conta do histórico do município. Nele existe a TI Mão Maria, terra indigena habitada pelos povos Gavião Akrãtikatêjê, Gavião Kykatejê, Gavião Parkatêjê e Guarani ( Guarani Mbya ); contando com um grande histórico de lutas e disputas. O município já foi vitíma do chamado “arco do desmatamento”, que tranformou sua paisagem por completo. Como vamos ver a seguir, o munícipio teve sua composição e configuração completamente modificadas. U</p>
-</section>
-</section>
-<section id="parte-3-análise-de-ecologia-política" class="level1">
-<h1>Parte 3: Análise de Ecologia Política</h1>
-<section id="panorama-geral" class="level2">
-<h2 class="anchored" data-anchor-id="panorama-geral">Panorama geral</h2>
-<p>Bom Jesus do Tocantins é um município localizado na região sudeste do estado do Pará. Essa região é marcada por muitas lutas e forte ação do desmatamento, mineração, grilagem e outros. A população é formada por cerca de 18 mil habitantes (último censo em 2022), marcada por grande informalidade, tendo menos de 2 mil habitantes em empregos formais em 2013. A pirâmide etária se mostra muito larga na base e no corpo, com baixa população idosa; também apresetando baixo IDH (0,589). Com isso, a expectativa de vida é muito baixa do município, por conta da baixa saúde e más condições de trabalho. <img src="Imagens/piramideet2.png" class="img-fluid" alt="Pirâmide etária Bom Jesus do Tocantins"> Não existem dados sobre mortalidade infantil, porém o município é o 9° lugar em internações por diarréia no SUS, sendo 680,5 internações por 100 mil habitantes em 2024.</p>
-</section>
-<section id="histórico-politico" class="level2">
-<h2 class="anchored" data-anchor-id="histórico-politico">Histórico Politico</h2>
-<p>Bom Jesus do Tocantins guarda alguns escândalos em sua historia - Escandalo Sexual com Menores de idade <img src="Imagens/noticia 1.png" class="img-fluid" alt="G1"> - Escandalo do programa “Sua Casa”, destinado para construção de moradia popular <img src="imagens/noticia 2.png" class="img-fluid" alt="Portal Cidade Atual"> - Fazenda Gaúcha <img src="Imagens/Noticia 3.png" class="img-fluid" alt="G1 e Hiroshi Braga Online"> ## Lutas</p>
-<p>O MST e outros motivmentos atuam no local. Pedindo pela regulação fundiária e por diversas reformas. Normalmente, são reprimidos com uso de violência. Junto a isso, ocorreram diversos protestos. Um importante ocorreu na BR-222, pedindo por reforma agrária, infraestrutura para acampamentos de sem terra e pelo fim da violência de campo. <img src="Imagens/Noticia 4.png" class="img-fluid" alt="Mapa de conflitos FioCruZ"> A luta Indigena também é forte da área. Eles reivindicam a consulta prévia sobre duplicação da Estrada de Ferro Carajás, além de denunciar violência e impactos ambientais. <img src="imagens/noticia 5.png" class="img-fluid" alt="G1 e TV Liberal"></p>
+<p>O município escolhido para avaliação foi “Bom Jesus do Tocantins (PA)”. Importante não confundir com um município de mesmo nome no estado do Tocantins. A escolha se deu por conta do histórico do município. Nele existe a TI Mão Maria, terra indigena habitada pelos povos Gavião Akrãtikatêjê, Gavião Kykatejê, Gavião Parkatêjê e Guarani ( Guarani Mbya ); contando com um grande histórico de lutas e disputas. O município já foi vitíma do chamado “arco do desmatamento”, que tranformou sua paisagem por completo. Como vamos ver a seguir, o munícipio teve sua composição e configuração completamente modificadas.</p>
 </section>
 <section id="dados-e-processamento" class="level2">
 <h2 class="anchored" data-anchor-id="dados-e-processamento">Dados e processamento</h2>
@@ -1299,9 +1299,88 @@ max value   :        33 </code></pre>
 <p>Essa ideia se suporta por conta das menores distâncias entre os fragmentos na parte noroeste de Bom jesus, tendo o auxilío de manchas verdes como tranpolins para algumas espécies, além dos maiores tamanhos e configurações com menor efeito de borda aparente.</p>
 <p>Dessa forma, fragmentos distantes da Terra Indigena Mãe Maria teriam fluxo gênico menor, por conta da maior distância e menor quantidade de tranpolins; junto a um tamanho menor e configurações com maior efeito de borda. Também podemos esperar diferentes desempenhos para cada grupo biológico. Organismos voadores, tolerantes a maiores temperaturas e aridez vão desempenhar melhor que anuros, anelídeos, gastropodes e outros grupos com menor mobilidade e tolerância.</p>
 </section>
+<section id="efeito-de-borda" class="level2">
+<h2 class="anchored" data-anchor-id="efeito-de-borda">Efeito de borda</h2>
+<p>O mesmo causador da perda de fluxo gênico também causa o aumento do efeito de borda. Ao fragmentar e habitats e diminuir sua área de extensão, aumentamos o efeito de borda. O fragmento com menor efeito de borda é o 1. Nele podemos esperar encontrar especialistas de interior de floresta, ou até mesmo mamíferos de grande de porte, que possuem uma relação com grandes áreas. Nos fragmentos menores, podemos esperar grande ploriferação de espécies oportunistas, se aproveitando da luz e outros componentes de áreas com alto efeito de borda. O efeito de borda também prejudica a produtividade primária e o estoque de carbono, o que nos leva a acreditar que o fragmento 1 possua maior assimilaçao de carbono, como veremos a seguir.</p>
+</section>
 <section id="produtividade-primária-e-estoque-de-carbono" class="level2">
 <h2 class="anchored" data-anchor-id="produtividade-primária-e-estoque-de-carbono">Produtividade primária e estoque de carbono</h2>
-<p>Com isso podemos esperar baixa produtiviade primária e um baixo estoque nos fragmentos menores. Tendo</p>
+<p>Com isso podemos esperar baixa produtiviade primária e um baixo estoque nos fragmentos menores. Coma a conversão de vegetação nativa para pasto, a capacidade de estocar carbono cai imensamente em ambientes Amazônicos (Fearnside. 1998). Como podemos ver, a capacidade de estocar carbono era extremamente alta em 1985 e cai drasticamente para 2024. Devido a a agregação, o estado mais primitivo da floresta, a TI Mãe Maria é mais capaz de estocar carbono, mesmo que não exista grande diferença para outras áreas; <img src="imagens/carbonoantigo.png" class="img-fluid" alt="Estoque de carbono 1985"> <img src="imagens/carbonoatual.png" class="img-fluid" alt="Estoque de carbono 2024"></p>
+</section>
+<section id="fluxos-biogeoquímicos" class="level2">
+<h2 class="anchored" data-anchor-id="fluxos-biogeoquímicos">Fluxos biogeoquímicos</h2>
+<p>As matas ciliares do Bom Jesus foram completamente afetadas pelo desmatamento e a queima. Afetando também as florestas alagadas, ambiente que teve grandes perdas e quase sumiu do mapa. O município ainda é abastecido em partes pelo corpo d’água presente em seu território, mas precisa de ajuda externa para o abastecimento. A qualidade da água também é muito criticada por moradores. Os processos biogeoquímicos do solo também podem estar afetados, tendo em vista que a queima da floresta gera resíduos que permanecem no solo durante muito tempo.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/desmatamento.png" class="img-fluid figure-img"></p>
+<figcaption>Desmatamento</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/fogo.png" class="img-fluid figure-img"></p>
+<figcaption>Fogo</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="parte-3-análise-de-ecologia-política" class="level1">
+<h1>Parte 3: Análise de Ecologia Política</h1>
+<section id="cadeia-de-explicação" class="level2">
+<h2 class="anchored" data-anchor-id="cadeia-de-explicação">Cadeia de explicação</h2>
+<p>Bom Jesus do Tocantins é um município localizado na região sudeste do estado do Pará. Essa região é marcada por muitas lutas e forte ação do desmatamento, mineração, grilagem e outros. A população é formada por cerca de 18 mil habitantes (último censo em 2022), marcada por grande informalidade, tendo menos de 2 mil habitantes em empregos formais em 2013. A pirâmide etária se mostra muito larga na base e no corpo, com baixa população idosa; também apresetando baixo IDH (0,589). Com isso, a expectativa de vida é muito baixa do município, por conta da baixa saúde e más condições de trabalho. <img src="Imagens/piramideet2.png" class="img-fluid" alt="Pirâmide etária Bom Jesus do Tocantins"> Não existem dados sobre mortalidade infantil, porém o município é o 9° lugar em internações por diarréia no SUS, sendo 680,5 internações por 100 mil habitantes em 2024.</p>
+<p>A supressão de floresta foi veloz a terra ficou concentrada nas mãos de poucos. Os grandes empresários de terra estão envolvidos na política local. Sendo assim eles possuem grande capital financeiro e político. O modelo financeiro do lugar é de uma economia curta. Onde os trabalhadores se matam pra conseguir comprar comida para sobreviver. Os lucros da criação de gado se mantém entre os donos de terra. O pouco de agricultura que sobre sustenta muito poucos.</p>
+<p>Enquanto isso, a maior parte do município vive em condições precárias, onde nem mesmo quantificar é facil, tendo em vista a falta de informação para a cidade. Um dos indicares é o baixo IDH (0,589).</p>
+<p>Dentro de Bom Jesus, 3 entidades principais lutam entre si. Os indigenas, os integrantes de movimentos sem terra e os grileiros/Grande fazendeiros.</p>
+</section>
+<section id="mapeamento-de-atores" class="level2">
+<h2 class="anchored" data-anchor-id="mapeamento-de-atores">Mapeamento de atores</h2>
+<section id="a-terra-indigena-mãe-maria." class="level3">
+<h3 class="anchored" data-anchor-id="a-terra-indigena-mãe-maria.">A Terra Indigena Mãe Maria.</h3>
+<p>Criada em 1986, previamente a Bom Jesus do Tocantins, através do Decreto nº 93.148 de 20 de agosto de 1986, assinado por Sarney. A terra indigena é cortada pela estrada de ferro dos Carajás e possui uma linha de transmissão a cortando. A empresa Vale afirma pagar uma idenização mensal de 300 mil reais por mês.</p>
+<p>Os povos indigenas que Habitam a TI Mãe Maria são os povos gaviões. Que possuem um longo histórico de luta no local.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/timaps.png" class="img-fluid figure-img"></p>
+<figcaption>TI por Satélite</figcaption>
+</figure>
+</div>
+<p>### Sem Terras</p>
+<p>Além disso, a região conta com integrantes do MST e outros movimentos, que travam embates constantes. Dois casos importantes se destacam. O primeiro, o Caso da Fazenda Gaúcha. Onde integrantes dos movimentos sem terra buscaram ocupar a fazenda, pedindo por melhores condições, reforma agrária e o fim da violência de campo. O que encontraram foi supressão armada, ferindo mortalmente algumas pessoas</p>
+<p>### Grileiros e grandes Latifundiários</p>
+<p>Existem denúncias e apotamentos de grilagem de terra, manipulação, corrupção e violência. Até agora, nenhuma das acusações foram provadas, porém, assassinatos e violência de campo são algo comum na área. Os poucos que resolvem denunciar são, geralmente, jornalistas independentes. Os Grandes fazendeiros são os que ganham com todo o caos do lugar. Utilizar da terra para produzir gado e vender para o mercado externo é vantajoso para eles. A medida que eles esgotam a terra, lucram. Se a terra exaurir, vão busar mais, custe o que custar.</p>
+</section>
+</section>
+<section id="linha-do-tempo" class="level2">
+<h2 class="anchored" data-anchor-id="linha-do-tempo">Linha do tempo</h2>
+<p>O município possui uma criação recente, datando de 1988. Por volta da decada de 60, Bom Jesus era pouco habitado e fazia parte de outro municipio. Com o interesse agrário no local, na intenção de estabelecer roças, o município foi populado e posteriormente fundado oficialmente. Como dito antes, a criação da TI Mãe Maria é previa a de Bom Jesus. Contudo, os povos gaviões já eram perseguidos previamente. Ocorreu uma certa tentativa de pacificar os povos gaviões, o que resultou numa perda de 70% da sua população total. Ainda hoje, eles lutam para se reerguerem. Na primeira metade do século XX, os “Gaviões de oeste” se distribuiam em três unidades locais autodenominadas conforme a posição que ocupavam na bacia do rio Tocantins. Uma delas chamou-se Parkatêjê (onde par é pé, jusante; katê é dono; e jê é povo), “o povo de jusante”, enquanto outra, Kyikatêjê (onde kyi é cabeça), “o povo de montante”, porque, no começo do século XX, por motivo de guerra entre as duas, a primeira refugiou-se a montante do rio Tocantins, já no Estado do Maranhão). A terceira unidade, que ficou conhecida como “turma da Montanha” conforme sua autodenominação Akrãtikatêjê (onde akrãti é montanha), ocupava as cabeceiras do rio Capim. A Criação da PA-322, futuramente convertida em BR-222, foi a primeira ligação de Bom Jesus com a transamazôncia. A construção desta rodovia acelerou a ocupação efetiva e desordenada daquela porção da Amazônia, favorecendo a invasão sistemática e crescente da terra dos Gaviões, tanto por agricultores como por obras estatais de infra-estrutura dos projetos que viriam a se instalar na região.</p>
+<p>Mais tarde, a terra indígena foi ainda cortada pela linha de transmissão da Eletronorte, originada na Usina Hidroelétrica de Tucuruí, e, em 1982, pela Estrada de Ferro Carajás.</p>
+<p>Esses processos levaram a aceleração da tomada de terra.</p>
+<p>Os Indigenas em muito foram suprimidos. O dinheiro advindo do acordo com a Vale para construção da Ferrovia (7 milhões) nunca chegou realmente nas mãos dos Gaviões.</p>
+<p>Não há muita informação sobre como a terra foi sendo tomada. O que temos são noticías de protestos tanto pelos sem terra, tanto pelos indigenas e os dados da plataforma MapBiomas</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Imagens/desmatamentoti.png" class="img-fluid figure-img"></p>
+<figcaption>Desmatamento</figcaption>
+</figure>
+</div>
+<p>Os Sem-Terra, em especial, relatam invasões em acapamentos, assassinatos, pistolagens e outros tipos de violência.</p>
+</section>
+</section>
+<section id="parte-4-proposta-de-manejo-integrado" class="level1">
+<h1>Parte 4: Proposta de Manejo Integrado</h1>
+<p>Bom Jesus do Tocantins representa um grande desafio, tendo em vista a natureza do local para carecer de informações. Mas existem alguns passos importantes a serem tomados, visando restruturar um pouco do local.</p>
+<section id="diagnóstico-integrado" class="level2">
+<h2 class="anchored" data-anchor-id="diagnóstico-integrado">Diagnóstico integrado</h2>
+<p>O município de Bom Jesus do Tocantins apresenta problemas que precisam ser resolvidos com prioridade. A destruição de matas ciliares e a pouca conectividade entre os fragmentos representam dois grandes problemas que podem ser resolvidos com manejo. Há também o problema da violência do campo, associada com a grilagem e desmatamento. A proteção da TI Mãe Maria, a criação de uma economia viável, a luta contra a violência e outros objetivos também são necessários.</p>
+</section>
+<section id="objetivos-e-intervenções" class="level2">
+<h2 class="anchored" data-anchor-id="objetivos-e-intervenções">Objetivos e intervenções</h2>
+<p>Recuperação das APPS, promovendo o reestabelecimento das matas ciliares, visando minimizar os impactos em corpos d’água, forncecer água de melhor qualidade a longo prazo e restaurar as florestas alagadas. Recuperação de, ao menos, 20% das matas da parte norte do município, visando aumentar a área de fragmentos já existentes e aumentando o habitat fonte. Regulação fundiária visando diminuir a violência em campo. Ação conjunta ao Movimentos Sem-Terra e a regulação fundiária, fornecendo terra e promovendo agriculturas voltadas para o mercado interno, visando diminuir a fome e contruir uma matriz agroflorestal mais tolerante, funcionando como corredor. Regularização do CAR, visando restabelecer as RL’s.</p>
+</section>
+<section id="governança-e-monitoramento" class="level2">
+<h2 class="anchored" data-anchor-id="governança-e-monitoramento">Governança e monitoramento</h2>
+<p>Monitoramento da vegetação nativa - Da formação florestal nos fragmentos norte - Da APPS ao redor dos corpos d’água, através da vegetação de floresta alagada. Monitorar os indices de conflitos agrários e violência em campo. Monitorar os números de CAR regularizados. Monitorar o estabelcimento e o sucesso de sistesmas agroglorestais</p>
 </section>
 </section>
 <section id="referências-de-artigos" class="level1">
@@ -1309,10 +1388,11 @@ max value   :        33 </code></pre>
 <p>DE ANDRADE LIMA, José Henrique et al.&nbsp;Landscape genetics highlights species-specific ecological influences on gene flow in highland frog populations from northeastern Brazil.&nbsp;<strong>Ecological Processes</strong>, v. 14, n.&nbsp;1, p.&nbsp;57, 2025.</p>
 <p>ROSA, Jaqueline Figuerêdo; RAMALHO, Mauro; ARIAS, Maria Cristina. Functional connectivity and genetic diversity of Eulaema atleticana (Apidae, Euglossina) in the Brazilian Atlantic Forest Corridor: assessment of gene flow.&nbsp;<strong>Biotropica</strong>, v. 48, n.&nbsp;4, p.&nbsp;509-517, 2016.</p>
 <p>ZIMMERMANN, Beate; PAPRITZ, Andreas; ELSENBEER, Helmut. Asymmetric response to disturbance and recovery: Changes of soil permeability under forest–pasture–forest transitions. Geoderma, v. 159, n.&nbsp;1-2, p.&nbsp;209-215, 2010.</p>
+<p>FEARNSIDE, Philip M.; BARBOSA, Reinaldo Imbrozio. Soil carbon changes from conversion of forest to pasture in Brazilian Amazonia. Forest ecology and management, v. 108, n.&nbsp;1-2, p.&nbsp;147-166, 1998.</p>
 </section>
 <section id="referências-gerais" class="level1">
 <h1>Referências gerais:</h1>
-<p>https://terrasindigenas.org.br/pt-br/terras-indigenas/3750#noticias https://bomjesusdotocantins.pa.gov.br/ https://cidades.ibge.gov.br/brasil/pa/bom-jesus-do-tocantins/panorama https://g1.globo.com/pa/para/noticia/2026/05/19/empresarios-sao-investigados-por-crimes-sexuais-contra-criancas-e-adolescentes-no-sudeste-do-para.ghtml https://g1.globo.com/pa/para/noticia/2026/05/19/empresarios-sao-investigados-por-crimes-sexuais-contra-criancas-e-adolescentes-no-sudeste-do- https://globoplay.globo.com/v/14627533/ https://portalcidadeatual.com.br/bom-jesus/moradores-de-bom-jesus-do-tocantins-denunciam-desvio-de-recursos-do-programa-sua-casa-da-cohab-pa https://www.hiroshibogea.com.br/fazenda-gaucha-mais-uma-questao-fundiaria-no-para-mal-resolvida/ https://mapadeconflitos.ensp.fiocruz.br/conflito/pa-trabalhadores-rurais-sem-terra-lutam-pela-vida-e-por-regularizacao-fundiaria-no-acampamento-nova-esperanca/ https://globoplay.globo.com/v/6167904/ https://g1.globo.com/pa/para/noticia/2026/03/16/protesto-indigena-bloqueia-estrada-de-ferro-carajas-no-para.ghtml</p>
+<p>https://terrasindigenas.org.br/pt-br/terras-indigenas/3750#noticias https://bomjesusdotocantins.pa.gov.br/ https://cidades.ibge.gov.br/brasil/pa/bom-jesus-do-tocantins/panorama https://g1.globo.com/pa/para/noticia/2026/05/19/empresarios-sao-investigados-por-crimes-sexuais-contra-criancas-e-adolescentes-no-sudeste-do-para.ghtml https://g1.globo.com/pa/para/noticia/2026/05/19/empresarios-sao-investigados-por-crimes-sexuais-contra-criancas-e-adolescentes-no-sudeste-do- https://globoplay.globo.com/v/14627533/ https://portalcidadeatual.com.br/bom-jesus/moradores-de-bom-jesus-do-tocantins-denunciam-desvio-de-recursos-do-programa-sua-casa-da-cohab-pa https://www.hiroshibogea.com.br/fazenda-gaucha-mais-uma-questao-fundiaria-no-para-mal-resolvida/ https://mapadeconflitos.ensp.fiocruz.br/conflito/pa-trabalhadores-rurais-sem-terra-lutam-pela-vida-e-por-regularizacao-fundiaria-no-acampamento-nova-esperanca/ https://globoplay.globo.com/v/6167904/ https://g1.globo.com/pa/para/noticia/2026/03/16/protesto-indigena-bloqueia-estrada-de-ferro-carajas-no-para.ghtml https://pib.socioambiental.org/pt/Povo:Gavi%C3%A3o_Parkat%C3%AAj%C3%AA https://anovademocracia.com.br/pa-camponeses-resistem-a-pistoleiros-em-acampamento-no-bom-jesus-do-tocantins/</p>
 
 
 </section>
